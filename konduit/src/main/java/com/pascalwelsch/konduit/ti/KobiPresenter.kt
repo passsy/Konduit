@@ -60,7 +60,7 @@ abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
      */
     protected abstract fun build(context: BuildContext): List<Widget>
 
-    protected fun setState(block: () -> Unit) {
+    protected inline fun setState(block: () -> Unit) {
         block()
         dispatchRender()
     }
@@ -77,7 +77,7 @@ abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
         dirty = false
     }
 
-    private fun dispatchRender() {
+    fun dispatchRender() {
         if (view == null) {
             Log.v(TAG, "no view, don't render. Next attach will trigger render again")
             return
