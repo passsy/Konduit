@@ -87,4 +87,7 @@ interface KonduitUI {
      * The view wont receive any binding updates until the [Widget] will be added again [onWidgetAdded]
      */
     fun onWidgetRemoved(widget: Widget)
+
+    // instead of a global changed event, register a binding with [renderer.bind] for this widget
+    //fun onWidgetChanged(widget: Widget)
 }
