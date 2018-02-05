@@ -15,8 +15,11 @@
 
 package com.pascalwelsch.konduit.android
 
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.res.Resources
+import android.os.Build
+import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +30,7 @@ import com.pascalwelsch.konduit.ti.KonduitUI
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
+import java.util.Locale
 
 private val TAG = AndroidViewRenderer::class.java.simpleName
 private val DEBUG = true
@@ -165,6 +169,15 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
                 // please provide your own mapping
                 throw IllegalStateException("no string found for id $id")
             }
+
+            override fun getLocale(): List<Locale> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    return activity.resources.configuration.locales.toCollection().toList()
+                } else {
+                    @Suppress("DEPRECATION")
+                    return listOf(activity.resources.configuration.locale)
+                }
+            }
         }
     }
 
@@ -233,3 +246,39 @@ private inline val View.flatChildren: List<View>
                 .map { getChildAt(it) }
                 .flatMap { listOf(it) + it.flatChildren }
     }
+
+
+
+@TargetApi(Build.VERSION_CODES.N)
+private fun LocaleList.toCollection(): Collection<Locale> {
+    val list = this
+    return object : Collection<Locale> {
+        override val size: Int = list.size()
+
+        override fun contains(element: Locale): Boolean = list.indexOf(element) != -1
+
+        override fun containsAll(elements: Collection<Locale>): Boolean {
+            elements.forEach {
+                if (list.indexOf(it) == -1) return false
+            }
+            return true
+        }
+
+        override fun isEmpty(): Boolean = list.size() == 0
+
+        override fun iterator(): Iterator<Locale> {
+            return object : Iterator<Locale> {
+
+                var i = -1
+                override fun hasNext(): Boolean = list.size() < (i + 1)
+
+                override fun next(): Locale {
+                    if (!hasNext()) throw NoSuchElementException()
+                    i++
+                    return list.get(i)
+                }
+
+            }
+        }
+    }
+}

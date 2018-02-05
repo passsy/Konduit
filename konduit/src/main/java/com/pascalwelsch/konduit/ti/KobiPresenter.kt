@@ -21,6 +21,7 @@ import com.pascalwelsch.konduit.widget.Widget
 import net.grandcentrix.thirtyinch.TiPresenter
 import net.grandcentrix.thirtyinch.TiView
 import java.lang.IllegalStateException
+import java.util.Locale
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadPoolExecutor
@@ -135,4 +136,5 @@ interface BoundView : TiView {
 interface BuildContext {
     fun getString(id: Any, vararg formatArgs: Any): String
     fun viewById(key: Any): Int?
+    fun getLocale(): List<Locale>
 }
