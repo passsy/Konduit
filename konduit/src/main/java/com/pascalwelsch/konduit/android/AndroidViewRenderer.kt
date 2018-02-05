@@ -89,7 +89,6 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
 
     private var lastRenderedWidgets: List<Widget> = emptyList()
 
-    //TODO change Int (key) to separate from android R ids?
     val viewBindings: HashMap<Any, MutableList<AndroidViewBinding>> = hashMapOf()
 
     fun bindingsFor(key: Any): MutableList<AndroidViewBinding> {

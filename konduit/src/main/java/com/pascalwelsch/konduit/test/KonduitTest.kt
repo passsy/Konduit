@@ -24,6 +24,7 @@ import com.pascalwelsch.konduit.widget.Text
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import net.grandcentrix.thirtyinch.test.TiTestPresenter
+import java.util.Locale
 import java.util.concurrent.Executor
 
 /**
@@ -36,11 +37,13 @@ import java.util.concurrent.Executor
  * ui.widget<Text>(R.id.result).hasText(ui.i18n(R.string.success))
  * ```
  */
-inline fun <reified V : BoundView, P : KonduitPresenter<V>> P.testUi(): KobiTestableUi<P, V> {
+inline fun <reified V : BoundView, P : KonduitPresenter<V>> P.testUi(
+        context: BuildContext? = null): KobiTestableUi<P, V> {
     val testPresenter = this.test()
     renderThreadExecutor = Executor { it.run() }
 
-    val buildContext: BuildContext = object : BuildContext {
+    val buildContext: BuildContext = context ?: object : BuildContext {
+        override fun getLocale(): List<Locale> = listOf(Locale("test"))
         override fun viewById(key: Any): Int = key as Int
         override fun getString(id: Any, vararg formatArgs: Any): String {
             return "mocked-stringRes-$id" + formatArgs.joinToString(separator = "-", prefix = "-")
