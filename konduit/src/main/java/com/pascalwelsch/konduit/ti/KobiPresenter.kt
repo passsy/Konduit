@@ -70,6 +70,12 @@ abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
         dispatchRender()
     }
 
+    override fun onDetachView() {
+        super.onDetachView()
+        lastRenderedWidgets = null
+        dirty = false
+    }
+
     private fun dispatchRender() {
         if (view == null) {
             Log.v(TAG, "no view, don't render. Next attach will trigger render again")
