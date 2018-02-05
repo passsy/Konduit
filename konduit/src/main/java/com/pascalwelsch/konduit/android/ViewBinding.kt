@@ -17,6 +17,7 @@ package com.pascalwelsch.konduit.android
 
 import android.databinding.adapters.ViewBindingAdapter
 import android.view.View
+import android.widget.AdapterView
 import com.pascalwelsch.konduit.widget.Widget
 
 class ViewBinding(private val view: View) : AndroidViewBinding {
@@ -28,7 +29,9 @@ class ViewBinding(private val view: View) : AndroidViewBinding {
             view.visibility = if (widget.visible) View.VISIBLE else View.GONE
         }
 
-        val clickListener = widget.onClick?.let { click -> View.OnClickListener { click.invoke() } }
-        ViewBindingAdapter.setClickListener(view, clickListener, true)
+        if (view !is AdapterView<*>) {
+            val clickListener = widget.onClick?.let { click -> View.OnClickListener { click.invoke() } }
+            ViewBindingAdapter.setClickListener(view, clickListener, true)
+        }
     }
 }
