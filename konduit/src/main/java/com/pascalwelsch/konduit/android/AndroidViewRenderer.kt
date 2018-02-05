@@ -43,6 +43,11 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
         }
     }
 
+    val autoBindings = mutableListOf<(View) -> AndroidViewBinding?>(
+            { view -> ViewBinding(view) },
+            { view -> if (view is TextView) TextViewBinding(view) else null }
+    )
+
     fun autobind(view: View, key: Any = view.id) {
         val bindings = bindingsFor(key)
 
@@ -52,9 +57,11 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
             Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
         }
 
-        bindings.add(ViewBinding(view))
-        if (view is TextView) {
-            bindings.add(TextViewBinding(view))
+        autoBindings.forEach { autobind ->
+            val autoBinding = autobind(view)
+            if (autoBinding != null) {
+                bindings.add(autoBinding)
+            }
         }
     }
 
