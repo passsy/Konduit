@@ -22,7 +22,6 @@ class SpinnerWidget : Widget() {
             field = value
         }
 
-
     var items: Array<String> = emptyArray()
         set(value) {
             checkWritability()
@@ -58,5 +57,4 @@ class SpinnerWidget : Widget() {
         result = 31 * result + (onItemSelected?.hashCode() ?: 0)
         return result
     }
-
 }

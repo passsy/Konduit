@@ -28,13 +28,14 @@ import java.util.concurrent.ThreadPoolExecutor
 
 /**
  * Creates a list of [Widget] whenever the state changes and binds the latest data to the currently attached view [V]. With clever
- * diffing [BoundView.render] is only called when the result of [build] really changes
+ * diffing [KonduitView.render] is only called when the result of [build] really changes
  */
-abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
+abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
 
     @VisibleForTesting
     var renderThreadExecutor: Executor = Executors.newSingleThreadExecutor()
 
+    @Suppress("PrivatePropertyName")
     private val TAG = KonduitPresenter::class.java.simpleName
 
     @Volatile
@@ -120,8 +121,7 @@ abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
     }
 }
 
-//TODO find better name. KonduitView?
-interface BoundView : TiView {
+interface KonduitView : TiView {
 
     fun getBuildContext(): BuildContext
 
@@ -133,7 +133,9 @@ interface BoundView : TiView {
     fun render(widgets: List<Widget>)
 }
 
+// TODO
 interface BuildContext {
+
     fun getString(id: Any, vararg formatArgs: Any): String
     fun viewById(key: Any): Int?
     fun getLocale(): List<Locale>

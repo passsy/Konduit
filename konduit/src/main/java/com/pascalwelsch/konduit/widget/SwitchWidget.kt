@@ -35,5 +35,4 @@ class SwitchWidget : Widget() {
         result = 31 * result + value.hashCode()
         return result
     }
-
 }

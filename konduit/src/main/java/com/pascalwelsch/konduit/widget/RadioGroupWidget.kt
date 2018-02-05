@@ -33,5 +33,4 @@ class RadioGroupWidget : Widget() {
         result = 31 * result + checkedId.hashCode()
         return result
     }
-
 }

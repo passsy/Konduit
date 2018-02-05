@@ -16,9 +16,9 @@
 package com.pascalwelsch.konduit.test
 
 import com.nhaarman.mockito_kotlin.*
-import com.pascalwelsch.konduit.BoundView
 import com.pascalwelsch.konduit.BuildContext
 import com.pascalwelsch.konduit.KonduitPresenter
+import com.pascalwelsch.konduit.KonduitView
 import com.pascalwelsch.konduit.widget.InputWidget
 import com.pascalwelsch.konduit.widget.TextWidget
 import com.pascalwelsch.konduit.widget.Widget
@@ -37,7 +37,7 @@ import java.util.concurrent.Executor
  * ui.widget<Text>(R.id.result).hasText(ui.i18n(R.string.success))
  * ```
  */
-inline fun <reified V : BoundView, P : KonduitPresenter<V>> P.testUi(
+inline fun <reified V : KonduitView, P : KonduitPresenter<V>> P.testUi(
         context: BuildContext? = null): KobiTestableUi<P, V> {
     val testPresenter = this.test()
     renderThreadExecutor = Executor { it.run() }
@@ -63,7 +63,7 @@ inline fun <reified V : BoundView, P : KonduitPresenter<V>> P.testUi(
     return KobiTestableUi(this, testPresenter, renderCaptor, buildContext)
 }
 
-class KobiTestableUi<out P : KonduitPresenter<V>, V : BoundView>(
+class KobiTestableUi<out P : KonduitPresenter<V>, V : KonduitView>(
         val presenter: P,
         val instructor: TiTestPresenter<V>,
         val captor: KArgumentCaptor<List<Widget>>,

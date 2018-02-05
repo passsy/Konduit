@@ -3,7 +3,9 @@ package de.insta.upb.kobi
 import com.pascalwelsch.konduit.widget.ListWidget
 import com.pascalwelsch.konduit.widget.WidgetListBuilder
 
-fun <T> WidgetListBuilder.multiSelectableListView(init: MultiSelectableListWidget<T>.() -> Unit): MultiSelectableListWidget<T> = add( MultiSelectableListWidget(), init)
+fun <T> WidgetListBuilder.multiSelectableListView(
+        init: MultiSelectableListWidget<T>.() -> Unit): MultiSelectableListWidget<T> = add(
+        MultiSelectableListWidget(), init)
 
 /**
  * Widget for lists that have a selection that can be of a different type

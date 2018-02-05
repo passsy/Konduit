@@ -16,17 +16,17 @@
 package com.pascalwelsch.konduit.sample
 
 import android.os.Bundle
-import com.pascalwelsch.konduit.BoundView
 import com.pascalwelsch.konduit.BuildContext
 import com.pascalwelsch.konduit.KonduitActivity
 import com.pascalwelsch.konduit.KonduitPresenter
+import com.pascalwelsch.konduit.KonduitView
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.button
 import com.pascalwelsch.konduit.widget.progressBar
 import com.pascalwelsch.konduit.widget.text
 import com.pascalwelsch.konduit.widget.widgetList
 
-class MainActivity : KonduitActivity<MainPresenter, BoundView>() {
+class MainActivity : KonduitActivity<MainPresenter, KonduitView>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class MainActivity : KonduitActivity<MainPresenter, BoundView>() {
     override fun providePresenter() = MainPresenter()
 }
 
-class MainPresenter : KonduitPresenter<BoundView>() {
+class MainPresenter : KonduitPresenter<KonduitView>() {
 
     private var count = 0
 

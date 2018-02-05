@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.binding
 
-import android.view.View
 import com.pascalwelsch.konduit.widget.Widget
 
 /**

@@ -25,6 +25,4 @@ class ImageWidget : Widget() {
         result = 31 * result + drawableResourceId
         return result
     }
-
-
 }

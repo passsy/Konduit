@@ -41,7 +41,7 @@ import java.util.Locale
 private val TAG = AndroidViewRenderer::class.java.simpleName
 private val DEBUG = false
 
-open class AndroidViewRenderer(private val activity: Activity, private val ui: KonduitUI) : BoundView {
+open class AndroidViewRenderer(private val activity: Activity, private val ui: KonduitUI) : KonduitView {
 
     fun autobindAllViews(view: View) {
         view.flatChildren.filter { it.id > 0 }.forEach { v ->

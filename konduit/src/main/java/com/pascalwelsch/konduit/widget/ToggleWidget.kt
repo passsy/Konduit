@@ -34,5 +34,4 @@ class ToggleWidget : Widget() {
         result = 31 * result + text.hashCode()
         return result
     }
-
 }

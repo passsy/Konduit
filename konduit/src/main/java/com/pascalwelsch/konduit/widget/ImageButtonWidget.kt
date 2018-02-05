@@ -25,6 +25,4 @@ class ImageButtonWidget : ButtonWidget() {
         result = 31 * result + drawableResourceId
         return result
     }
-
-
 }
