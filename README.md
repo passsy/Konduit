@@ -2,7 +2,7 @@
 
 # Konduit - make Android Views fun again
 
-Konduit - like `View` but with `K` - is a React inspired way to bind data to Android Views.
+Konduit - is a React inspired way to bind data to Android Views
 
 Konduit is a layer on top of MVP where a Presenter talks to a View interface.
 Instead of calling the View interface directly you declare your UI using Widgets and Konduit will inform the View about changes automatically.
@@ -13,10 +13,10 @@ In traditional MVP implementations you have to update the View when
 Having two implementations is hard to maintain and it's nothing new that mutation is the main cause of many problems.
 
 Widgets are immutable data objects which describe the state of a View and provides listeners for user interactions.
-Each Widget will be bound to the corresponding Android View. It's a 1:1 mapping.
+Each Widget will be bound to the corresponding Android View, a 1:1 mapping.
 The immutability of the Widgets allows clever diffing and reduces unnecessary updates of the Views.
 
-Instead of calling the View directly you have to implement the `build()` function which should return a list of `Widgets` describing your UI state.
+Instead of calling the View directly you have to implement the `build()` function which should return a collection of `Widgets` describing your UI state.
 The `build()` function will be automatically called by Konduit when you change the state by calling `setState {  }`.
 You don't have to worry anymore if your view is currently detached (`view == null`) causing `NullPointerExceptions`.
 
