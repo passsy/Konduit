@@ -55,6 +55,7 @@ publish {
     userOrg = 'passsy'
     groupId = 'com.pascalwelsch.konduit'
     artifactId = 'konduit'
+    uploadName = 'Konduit'
     publishVersion = '0.1.0'
     website = 'https://github.com/passsy/Konduit'
 }
