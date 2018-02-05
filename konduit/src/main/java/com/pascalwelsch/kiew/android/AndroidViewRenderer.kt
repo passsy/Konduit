@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.android
 
-
 import android.app.Activity
 import android.content.res.Resources
 import android.util.Log
@@ -29,10 +28,8 @@ import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
 
-
 private val TAG = AndroidViewRenderer::class.java.simpleName
 private val DEBUG = true
-
 
 open class AndroidViewRenderer(private val activity: Activity, private val ui: KonduitUI) : BoundView {
 
@@ -119,7 +116,6 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
                 .filter { !added.contains(it) }
                 .filter { oldUi.findByKey(it.key) != it }
 
-
         // save for next render
         lastRenderedWidgets = widgets
 
@@ -161,8 +157,7 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
                 if (id is Int) {
                     return if (formatArgs.isNotEmpty()) {
                         activity.getString(id, *formatArgs)
-                    }
-                    else {
+                    } else {
                         activity.getString(id)
                     }
                 }

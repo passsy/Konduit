@@ -21,7 +21,6 @@ import android.widget.TextView
 import com.pascalwelsch.konduit.widget.Text
 import com.pascalwelsch.konduit.widget.Widget
 
-
 class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
 
     override fun bind(widget: Widget) {
@@ -35,5 +34,4 @@ class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
             TextViewBindingAdapter.setMaxLength(textView, widget.maxLength ?: Int.MAX_VALUE)
         }
     }
-
 }

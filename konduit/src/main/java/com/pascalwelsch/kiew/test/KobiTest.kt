@@ -65,6 +65,7 @@ class KobiTestableUi<out P : KonduitPresenter<V>, V : BoundView>(
         val captor: KArgumentCaptor<List<Widget>>,
         val context: BuildContext
 ) {
+
     val view: V get() = presenter.view!!
 
     /**

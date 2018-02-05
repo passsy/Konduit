@@ -72,9 +72,7 @@ abstract class KonduitActivity<P : KonduitPresenter<V>, V : BoundView> : TiActiv
         }
         return null
     }
-
 }
-
 
 interface KonduitUI {
     /**

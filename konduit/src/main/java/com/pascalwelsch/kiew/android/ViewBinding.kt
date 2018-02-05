@@ -19,7 +19,6 @@ import android.databinding.adapters.ViewBindingAdapter
 import android.view.View
 import com.pascalwelsch.konduit.widget.Widget
 
-
 class ViewBinding(private val view: View) : AndroidViewBinding {
     override fun bind(widget: Widget) {
         if (view.isEnabled != widget.enabled) {

@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.sample
 
-import com.pascalwelsch.konduit.sample.MainPresenter
 import com.pascalwelsch.konduit.test.click
 import com.pascalwelsch.konduit.test.testUi
 import com.pascalwelsch.konduit.widget.Button
@@ -37,7 +36,5 @@ class MainPresenterTest {
 
         // Then the counter will be incremented by 1
         assertThat(ui.widget<Text>(R.id.counter_label).text).contains("1")
-
     }
-
 }

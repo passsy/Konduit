@@ -23,5 +23,4 @@ import com.pascalwelsch.konduit.widget.Widget
 interface AndroidViewBinding {
 
     fun bind(widget: Widget)
-
 }

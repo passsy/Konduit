@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.widget
 
-
 open class Button : Text()
 
 fun WidgetListBuilder.button(init: Button.() -> Unit): Button {

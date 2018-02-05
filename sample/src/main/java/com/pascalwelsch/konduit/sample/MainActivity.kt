@@ -36,7 +36,6 @@ class MainActivity : KonduitActivity<MainPresenter, BoundView>() {
         renderer.bind<ProgressBar>(myProgressBar) { widget ->
             myProgressBar.progress = Math.round(widget.progress * myProgressBar.max)
         }
-
     }
 
     override fun providePresenter() = MainPresenter()
@@ -80,9 +79,7 @@ class MainPresenter : KonduitPresenter<BoundView>() {
             }
         }
     }
-
 }
-
 
 class ProgressBar : Widget() {
 

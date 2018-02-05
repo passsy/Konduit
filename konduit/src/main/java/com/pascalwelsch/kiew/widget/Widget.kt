@@ -15,12 +15,12 @@
 
 package com.pascalwelsch.konduit.widget
 
-
 @DslMarker
 annotation class WidgetMarker
 
 @WidgetMarker
 open class Widget {
+
     open var key: Any? = null
         set(value) {
             checkWritability()
@@ -102,7 +102,6 @@ open class Widget {
         return result
     }
 
-
     //endregion
 }
 
@@ -113,7 +112,6 @@ class WidgetListBuilder : MutableList<Widget> by mutableListOf() {
         add(widget)
         return widget
     }
-
 }
 
 fun widgetList(init: WidgetListBuilder.() -> Unit): List<Widget> {

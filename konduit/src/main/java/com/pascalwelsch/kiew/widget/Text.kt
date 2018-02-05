@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.widget
 
-
 open class Text : Widget() {
     open var text: String? = null
         set(value) {
@@ -55,6 +54,5 @@ open class Text : Widget() {
     //endregion
 
 }
-
 
 fun WidgetListBuilder.text(init: Text.() -> Unit): Text = add(Text(), init)

@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.ti
 
-
 import android.support.annotation.VisibleForTesting
 import android.util.Log
 import com.pascalwelsch.konduit.widget.Widget
@@ -116,6 +115,7 @@ abstract class KonduitPresenter<V : BoundView> : TiPresenter<V>() {
 
 //TODO find better name. KonduitView?
 interface BoundView : TiView {
+
     fun getBuildContext(): BuildContext
 
     /**

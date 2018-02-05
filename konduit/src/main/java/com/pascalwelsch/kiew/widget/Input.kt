@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.widget
 
-
 open class Input : Text()
 
 fun WidgetListBuilder.input(init: Input.() -> Unit): Input = add(Input(), init)
