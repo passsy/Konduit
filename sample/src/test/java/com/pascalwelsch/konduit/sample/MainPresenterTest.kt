@@ -37,4 +37,26 @@ class MainPresenterTest {
         // Then the counter will be incremented by 1
         assertThat(ui.widget<Text>(R.id.counter_label).text).contains("1")
     }
+
+    @Test
+    fun `progress bar jumps to 0 after 10 clicks`() {
+        val ui = MainPresenter().testUi()
+
+        // Given the UI shows the initial state
+        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isEqualTo(0f)
+
+        // When clicking the increment button 9 times
+        repeat(9) {
+            ui.widget<Button>(R.id.increment).click()
+        }
+
+        // Then the progress is at maximum
+        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isCloseTo(0.9f, withinPercentage(1))
+
+        // Another click
+        ui.widget<Button>(R.id.increment).click()
+
+        // resets it to minimum
+        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isEqualTo(0f)
+    }
 }
