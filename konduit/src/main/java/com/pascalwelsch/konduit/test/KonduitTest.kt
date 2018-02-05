@@ -16,11 +16,11 @@
 package com.pascalwelsch.konduit.test
 
 import com.nhaarman.mockito_kotlin.*
-import com.pascalwelsch.konduit.ti.BoundView
-import com.pascalwelsch.konduit.ti.BuildContext
-import com.pascalwelsch.konduit.ti.KonduitPresenter
-import com.pascalwelsch.konduit.widget.Input
-import com.pascalwelsch.konduit.widget.Text
+import com.pascalwelsch.konduit.BoundView
+import com.pascalwelsch.konduit.BuildContext
+import com.pascalwelsch.konduit.KonduitPresenter
+import com.pascalwelsch.konduit.widget.InputWidget
+import com.pascalwelsch.konduit.widget.TextWidget
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import net.grandcentrix.thirtyinch.test.TiTestPresenter
@@ -42,7 +42,8 @@ inline fun <reified V : BoundView, P : KonduitPresenter<V>> P.testUi(
     val testPresenter = this.test()
     renderThreadExecutor = Executor { it.run() }
 
-    val buildContext: BuildContext = context ?: object : BuildContext {
+    val buildContext: BuildContext = context ?: object :
+            BuildContext {
         override fun getLocale(): List<Locale> = listOf(Locale("test"))
         override fun viewById(key: Any): Int = key as Int
         override fun getString(id: Any, vararg formatArgs: Any): String {
@@ -128,20 +129,20 @@ fun Widget.click(): Widget {
     return this
 }
 
-fun Input.typeText(text: String): Input {
+fun InputWidget.typeText(text: String): InputWidget {
     kotlin.require(enabled) { "can't type text in disabled text field $this" }
     onTextChanged!!.invoke(text)
     return this
 }
 
-fun Text.hasText(text: String): Text {
+fun TextWidget.hasText(text: String): TextWidget {
     if (this.text != text) {
         throw IllegalArgumentException("text '${this.text}' doesn't match expected text '$text'")
     }
     return this
 }
 
-fun Text.isEmpty(): Text {
+fun TextWidget.isEmpty(): TextWidget {
     if (text?.isEmpty() != true) {
         throw IllegalArgumentException("text '${this.text}' should be empty")
     }

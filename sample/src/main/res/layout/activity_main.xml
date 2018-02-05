@@ -18,7 +18,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pascalwelsch.konduit.MainActivity">
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/increment"
@@ -56,6 +56,7 @@
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="12dp"
+        android:padding="16dp"
         android:max="100"
         app:layout_constraintTop_toBottomOf="@+id/counter_label" />
 </android.support.constraint.ConstraintLayout>

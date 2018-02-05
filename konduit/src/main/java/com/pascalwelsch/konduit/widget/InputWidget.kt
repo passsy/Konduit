@@ -15,8 +15,6 @@
 
 package com.pascalwelsch.konduit.widget
 
-open class Button : Text()
+open class InputWidget : TextWidget()
 
-fun WidgetListBuilder.button(init: Button.() -> Unit): Button {
-    return add(Button(), init)
-}
+fun WidgetListBuilder.input(init: InputWidget.() -> Unit): InputWidget = add(InputWidget(), init)

@@ -15,7 +15,9 @@
 
 package com.pascalwelsch.konduit.widget
 
-open class Text : Widget() {
+fun WidgetListBuilder.text(init: TextWidget.() -> Unit): TextWidget = add(TextWidget(), init)
+
+open class TextWidget : Widget() {
     open var text: String? = null
         set(value) {
             checkWritability()
@@ -32,10 +34,9 @@ open class Text : Widget() {
             field = value
         }
 
-    //region equals/hashcode/toString
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Text) return false
+        if (other !is TextWidget) return false
         if (!super.equals(other)) return false
 
         if (text != other.text) return false
@@ -50,9 +51,4 @@ open class Text : Widget() {
         result = 31 * result + (onTextChanged?.hashCode() ?: 0)
         return result
     }
-
-    //endregion
-
 }
-
-fun WidgetListBuilder.text(init: Text.() -> Unit): Text = add(Text(), init)

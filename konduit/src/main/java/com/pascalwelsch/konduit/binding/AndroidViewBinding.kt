@@ -13,8 +13,15 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.widget
+package com.pascalwelsch.konduit.binding
 
-open class Input : Text()
+import android.view.View
+import com.pascalwelsch.konduit.widget.Widget
 
-fun WidgetListBuilder.input(init: Input.() -> Unit): Input = add(Input(), init)
+/**
+ * Will be called to bind a widget to an arbitrary android view. This is the only connection between the two worlds
+ */
+interface AndroidViewBinding {
+
+    fun bind(widget: Widget)
+}

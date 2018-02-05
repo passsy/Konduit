@@ -16,13 +16,13 @@
 package com.pascalwelsch.konduit.sample
 
 import android.os.Bundle
-import com.pascalwelsch.konduit.ti.BoundView
-import com.pascalwelsch.konduit.ti.BuildContext
-import com.pascalwelsch.konduit.ti.KonduitActivity
-import com.pascalwelsch.konduit.ti.KonduitPresenter
+import com.pascalwelsch.konduit.BoundView
+import com.pascalwelsch.konduit.BuildContext
+import com.pascalwelsch.konduit.KonduitActivity
+import com.pascalwelsch.konduit.KonduitPresenter
 import com.pascalwelsch.konduit.widget.Widget
-import com.pascalwelsch.konduit.widget.WidgetListBuilder
 import com.pascalwelsch.konduit.widget.button
+import com.pascalwelsch.konduit.widget.progressBar
 import com.pascalwelsch.konduit.widget.text
 import com.pascalwelsch.konduit.widget.widgetList
 
@@ -31,12 +31,6 @@ class MainActivity : KonduitActivity<MainPresenter, BoundView>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val myProgressBar = findViewById<android.widget.ProgressBar>(R.id.progress_bar)
-        renderer.bind<ProgressBar>(myProgressBar) { widget ->
-            myProgressBar.progress = Math.round(widget.progress * myProgressBar.max)
-        }
-
     }
 
     override fun providePresenter() = MainPresenter()
@@ -46,7 +40,7 @@ class MainPresenter : KonduitPresenter<BoundView>() {
 
     private var count = 0
 
-    private var myProgress = 0f
+    private var myProgress = 0
 
     override fun build(context: BuildContext): List<Widget> {
         return widgetList {
@@ -64,7 +58,7 @@ class MainPresenter : KonduitPresenter<BoundView>() {
 
             progressBar {
                 key = R.id.progress_bar
-                progress = myProgress
+                progress = myProgress / 10f
             }
         }
     }
@@ -74,40 +68,11 @@ class MainPresenter : KonduitPresenter<BoundView>() {
             count++
 
             // change progress
-            myProgress += 0.1f
-            if (myProgress > 1) {
-                myProgress = 0f
+            if (myProgress >= 10) {
+                myProgress = 0
             }
+            myProgress += 1
         }
     }
-
 }
-
-
-class ProgressBar : Widget() {
-
-    var progress: Float = 0f
-        set(value) {
-            checkWritability()
-            field = value
-        }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is ProgressBar) return false
-        if (!super.equals(other)) return false
-
-        if (progress != other.progress) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + progress.hashCode()
-        return result
-    }
-}
-
-private fun WidgetListBuilder.progressBar(init: ProgressBar.() -> Unit): ProgressBar = add(ProgressBar(), init)
 

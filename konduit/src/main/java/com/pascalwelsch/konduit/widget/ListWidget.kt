@@ -15,6 +15,8 @@
 
 package com.pascalwelsch.konduit.widget
 
+fun <T> WidgetListBuilder.singleSelectionListView(init: ListWidget<T>.() -> Unit): ListWidget<T> = add(ListWidget(), init)
+
 open class ListWidget<T> : Widget() {
 
     open var items: List<T> = listOf()
@@ -54,5 +56,3 @@ open class ListWidget<T> : Widget() {
     }
     //endregion
 }
-
-fun <T> WidgetListBuilder.listView(init: ListWidget<T>.() -> Unit): ListWidget<T> = add(ListWidget(), init)

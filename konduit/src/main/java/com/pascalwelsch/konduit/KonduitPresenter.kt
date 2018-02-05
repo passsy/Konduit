@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.ti
+package com.pascalwelsch.konduit
 
 import android.support.annotation.VisibleForTesting
 import android.util.Log

@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.ti
+package com.pascalwelsch.konduit
 
 import android.view.View
 import android.view.ViewGroup
-import com.pascalwelsch.konduit.android.AndroidViewRenderer
 import com.pascalwelsch.konduit.widget.Widget
 import net.grandcentrix.thirtyinch.TiActivity
 import java.lang.IllegalStateException
@@ -28,7 +27,9 @@ import java.lang.IllegalStateException
 abstract class KonduitActivity<P : KonduitPresenter<V>, V : BoundView> : TiActivity<P, V>(), BoundView, KonduitUI {
 
     @Suppress("MemberVisibilityCanPrivate")
-    protected val renderer by lazy { AndroidViewRenderer(this@KonduitActivity, this@KonduitActivity) }
+    protected val renderer by lazy {
+        AndroidViewRenderer(this@KonduitActivity, this@KonduitActivity)
+    }
 
     override fun getBuildContext(): BuildContext {
         return renderer.getBuildContext()

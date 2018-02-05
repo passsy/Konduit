@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.android
+package com.pascalwelsch.konduit
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -23,17 +23,23 @@ import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.SeekBar
+import android.widget.Switch
 import android.widget.TextView
-import com.pascalwelsch.konduit.ti.BoundView
-import com.pascalwelsch.konduit.ti.BuildContext
-import com.pascalwelsch.konduit.ti.KonduitUI
+import com.pascalwelsch.konduit.binding.AndroidViewBinding
+import com.pascalwelsch.konduit.binding.ProgressBarBinding
+import com.pascalwelsch.konduit.binding.SeekBarBinding
+import com.pascalwelsch.konduit.binding.SwitchBinding
+import com.pascalwelsch.konduit.binding.TextViewBinding
+import com.pascalwelsch.konduit.binding.ViewBinding
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
 import java.util.Locale
 
 private val TAG = AndroidViewRenderer::class.java.simpleName
-private val DEBUG = true
+private val DEBUG = false
 
 open class AndroidViewRenderer(private val activity: Activity, private val ui: KonduitUI) : BoundView {
 
@@ -43,9 +49,12 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
         }
     }
 
-    val autoBindings = mutableListOf<(View) -> AndroidViewBinding?>(
-            { view -> ViewBinding(view) },
-            { view -> if (view is TextView) TextViewBinding(view) else null }
+    val autoBindings = mutableListOf<(View, add: (AndroidViewBinding) -> Unit) -> Unit>(
+            { view, add -> add(ViewBinding(view)) },
+            { view, add -> if (view is TextView) add(TextViewBinding(view)) },
+            { view, add -> if (view is Switch) add(SwitchBinding(view)) },
+            { view, add -> if (view is ProgressBar) add(ProgressBarBinding(view)) },
+            { view, add -> if (view is SeekBar) add(SeekBarBinding(view)) }
     )
 
     fun autobind(view: View, key: Any = view.id) {
@@ -57,12 +66,8 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
             Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
         }
 
-        autoBindings.forEach { autobind ->
-            val autoBinding = autobind(view)
-            if (autoBinding != null) {
-                bindings.add(autoBinding)
-            }
-        }
+        // add matching auto bindings
+        autoBindings.forEach { binding -> binding(view, { bindings.add(it) }) }
     }
 
     inline fun <reified W : Widget> bind(view: View, crossinline block: (W) -> Unit) {
@@ -253,8 +258,6 @@ private inline val View.flatChildren: List<View>
                 .flatMap { listOf(it) + it.flatChildren }
     }
 
-
-
 @TargetApi(Build.VERSION_CODES.N)
 private fun LocaleList.toCollection(): Collection<Locale> {
     val list = this
@@ -283,7 +286,6 @@ private fun LocaleList.toCollection(): Collection<Locale> {
                     i++
                     return list.get(i)
                 }
-
             }
         }
     }

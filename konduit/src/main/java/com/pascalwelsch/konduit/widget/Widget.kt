@@ -18,6 +18,10 @@ package com.pascalwelsch.konduit.widget
 @DslMarker
 annotation class WidgetMarker
 
+fun widgetList(init: WidgetListBuilder.() -> Unit): List<Widget> = WidgetListBuilder().apply(init)
+
+fun WidgetListBuilder.widget(init: Widget.() -> Unit): Widget = add(Widget(), init)
+
 @WidgetMarker
 open class Widget {
 
@@ -74,7 +78,6 @@ open class Widget {
         }
     }
 
-    //region equals/hashcode/toString
     override fun toString(): String {
         val props = nonDefaultStatesToString().joinToString()
         return "${javaClass.simpleName}($props)"
@@ -101,8 +104,6 @@ open class Widget {
         result = 31 * result + isWritable.hashCode()
         return result
     }
-
-    //endregion
 }
 
 class WidgetListBuilder : MutableList<Widget> by mutableListOf() {
@@ -113,12 +114,6 @@ class WidgetListBuilder : MutableList<Widget> by mutableListOf() {
         return widget
     }
 }
-
-fun widgetList(init: WidgetListBuilder.() -> Unit): List<Widget> {
-    return WidgetListBuilder().apply(init)
-}
-
-fun WidgetListBuilder.widget(init: Widget.() -> Unit): Widget = add(Widget(), init)
 
 fun List<Widget>.findByKey(key: Any?): Widget? {
     if (key == null) return null

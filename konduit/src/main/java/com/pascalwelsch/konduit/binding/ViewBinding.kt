@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.android
+package com.pascalwelsch.konduit.binding
 
 import android.databinding.adapters.ViewBindingAdapter
 import android.view.View

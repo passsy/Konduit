@@ -17,8 +17,9 @@ package com.pascalwelsch.konduit.sample
 
 import com.pascalwelsch.konduit.test.click
 import com.pascalwelsch.konduit.test.testUi
-import com.pascalwelsch.konduit.widget.Button
-import com.pascalwelsch.konduit.widget.Text
+import com.pascalwelsch.konduit.widget.ButtonWidget
+import com.pascalwelsch.konduit.widget.ProgressBarWidget
+import com.pascalwelsch.konduit.widget.TextWidget
 import org.assertj.core.api.Assertions.*
 import org.junit.*
 
@@ -29,13 +30,13 @@ class MainPresenterTest {
         val ui = MainPresenter().testUi()
 
         // Given the UI shows the initial state
-        assertThat(ui.widget<Text>(R.id.counter_label).text).contains("0")
+        assertThat(ui.widget<TextWidget>(R.id.counter_label).text).contains("0")
 
         // When clicking the increment button
-        ui.widget<Button>(R.id.increment).click()
+        ui.widget<ButtonWidget>(R.id.increment).click()
 
         // Then the counter will be incremented by 1
-        assertThat(ui.widget<Text>(R.id.counter_label).text).contains("1")
+        assertThat(ui.widget<TextWidget>(R.id.counter_label).text).contains("1")
     }
 
     @Test
@@ -43,20 +44,20 @@ class MainPresenterTest {
         val ui = MainPresenter().testUi()
 
         // Given the UI shows the initial state
-        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isEqualTo(0f)
+        assertThat(ui.widget<ProgressBarWidget>(R.id.progress_bar).progress).isEqualTo(0f)
 
-        // When clicking the increment button 9 times
-        repeat(9) {
-            ui.widget<Button>(R.id.increment).click()
+        // When clicking the increment button 10 times
+        repeat(10) {
+            ui.widget<ButtonWidget>(R.id.increment).click()
         }
 
         // Then the progress is at maximum
-        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isCloseTo(0.9f, withinPercentage(1))
+        assertThat(ui.widget<ProgressBarWidget>(R.id.progress_bar).progress).isCloseTo(1f, withinPercentage(1))
 
         // Another click
-        ui.widget<Button>(R.id.increment).click()
+        ui.widget<ButtonWidget>(R.id.increment).click()
 
-        // resets it to minimum
-        assertThat(ui.widget<ProgressBar>(R.id.progress_bar).progress).isEqualTo(0f)
+        // sets it to first step
+        assertThat(ui.widget<ProgressBarWidget>(R.id.progress_bar).progress).isEqualTo(0.1f)
     }
 }

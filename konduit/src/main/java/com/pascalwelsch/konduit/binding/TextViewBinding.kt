@@ -13,18 +13,18 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.android
+package com.pascalwelsch.konduit.binding
 
 import android.databinding.adapters.TextViewBindingAdapter
 import android.text.Editable
 import android.widget.TextView
-import com.pascalwelsch.konduit.widget.Text
+import com.pascalwelsch.konduit.widget.TextWidget
 import com.pascalwelsch.konduit.widget.Widget
 
 class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
 
     override fun bind(widget: Widget) {
-        if (widget is Text) {
+        if (widget is TextWidget) {
 
             TextViewBindingAdapter.setText(textView, widget.text)
 
