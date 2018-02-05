@@ -82,6 +82,11 @@ When it comes to i18n this can be hard to achieve.
 ## Download
 
 ```gradle
+repositories {
+    // until available at jcenter
+    maven { url "http://dl.bintray.com/passsy/maven" }
+}
+
 dependencies {
     compile 'com.pascalwelsch.konduit:konduit:0.1.0'
 }
