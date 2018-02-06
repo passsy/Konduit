@@ -71,14 +71,17 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
     }
 
     inline fun <reified W : Widget> bind(view: View, crossinline block: (W) -> Unit) {
-        val bindings = bindingsFor(view.id)
+        Log.v("Bind", "bind ${view.javaClass.simpleName} $view")
+        bind(view.id, block)
+    }
 
-        Log.v("Bind", "bind $view")
+    inline fun <reified W : Widget> bind(key: Any, crossinline block: (W) -> Unit) {
+        val bindings = bindingsFor(key)
+
         if (bindings.count() > 0) {
-            Log.v("Bind", " - ${view.javaClass.simpleName} already has ${bindings.count()} bindings")
+            Log.v("Bind", " - $key already has ${bindings.count()} bindings")
             Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
         }
-
 
         bindings.add(object : AndroidViewBinding {
             override fun bind(widget: Widget) {
@@ -86,7 +89,7 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
                     block(widget)
                 } else {
                     throw IllegalStateException(
-                            "Internal error, triggered binding for the wrong binding adapter. view: $view, widget: $widget")
+                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
                 }
             }
         })
