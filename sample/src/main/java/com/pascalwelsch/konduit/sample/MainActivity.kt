@@ -29,6 +29,8 @@ import com.pascalwelsch.konduit.widget.progressBar
 import com.pascalwelsch.konduit.widget.text
 import com.pascalwelsch.konduit.widget.widgetList
 
+private const val friendDialogKey =  "friend dialog"
+
 class MainActivity : KonduitActivity<MainPresenter, KonduitView>() {
 
     private var alertDialog: AlertDialog? = null
@@ -46,7 +48,7 @@ class MainActivity : KonduitActivity<MainPresenter, KonduitView>() {
     override fun onWidgetAdded(widget: Widget) {
         super.onWidgetAdded(widget)
         when (widget.key) {
-            "friend dialog" -> {
+            friendDialogKey -> {
                 alertDialog = Builder(this)
                         .setMessage("Welcome Friend")
                         .setPositiveButton("Cool") { d, i ->
@@ -62,7 +64,7 @@ class MainActivity : KonduitActivity<MainPresenter, KonduitView>() {
         super.onWidgetRemoved(widget)
 
         when (widget.key) {
-            "friend dialog" -> {
+            friendDialogKey -> {
                 alertDialog?.dismiss()
                 alertDialog = null
             }
@@ -110,7 +112,7 @@ class MainPresenter : KonduitPresenter<KonduitView>() {
 
             if (showFriedDialog) {
                 friendAlert {
-                    key = "friend dialog"
+                    key = friendDialogKey
                     message = if (count > 0) {
                         "Thanks for clicking $count times, friend!"
                     } else {
