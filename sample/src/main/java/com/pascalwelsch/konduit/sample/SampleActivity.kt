@@ -20,7 +20,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AlertDialog.Builder
 import com.pascalwelsch.konduit.KonduitActivity
 import com.pascalwelsch.konduit.KonduitView
-import com.pascalwelsch.konduit.widget.Widget
 
 class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
 
@@ -32,35 +31,23 @@ class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        renderer.bind<FriendAlertWidget>(friendDialogKey) { widget ->
-            alertDialog?.setMessage(widget.message)
-            alertDialog?.setOnDismissListener { widget.onDismiss?.invoke() }
-        }
-    }
-
-    override fun onWidgetAdded(widget: Widget) {
-        super.onWidgetAdded(widget)
-        when (widget.key) {
-            friendDialogKey -> {
-                alertDialog = Builder(this)
-                        // set a fake message so the alert dialog adds the message field which
-                        // will be filled later when binding the widget to the view
-                        .setMessage("")
-                        .setPositiveButton("Cool", null)
-                        .create()
-                alertDialog?.show()
-            }
-        }
-    }
-
-    override fun onWidgetRemoved(widget: Widget) {
-        super.onWidgetRemoved(widget)
-
-        when (widget.key) {
-            friendDialogKey -> {
-                alertDialog?.dismiss()
-                alertDialog = null
-            }
-        }
+        renderer.bind<FriendAlertWidget>(friendDialogKey,
+                onChange = { widget ->
+                    alertDialog?.setMessage(widget.message)
+                    alertDialog?.setOnDismissListener { widget.onDismiss?.invoke() }
+                },
+                onAdded = {
+                    alertDialog = Builder(this)
+                            // set a fake message so the alert dialog adds the message field which
+                            // will be filled later when binding the widget to the view
+                            .setMessage("")
+                            .setPositiveButton("Cool", null)
+                            .create()
+                    alertDialog?.show()
+                },
+                onRemoved = {
+                    alertDialog?.dismiss()
+                    alertDialog = null
+                })
     }
 }

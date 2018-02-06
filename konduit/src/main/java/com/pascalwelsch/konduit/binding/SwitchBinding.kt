@@ -5,7 +5,7 @@ import com.pascalwelsch.konduit.widget.SwitchWidget
 import com.pascalwelsch.konduit.widget.Widget
 
 class SwitchBinding(private val switch: Switch) : AndroidViewBinding {
-    override fun bind(widget: Widget) {
+    override fun onChanged(widget: Widget) {
         if (widget !is SwitchWidget) return
 
         switch.setOnCheckedChangeListener(null)

@@ -5,7 +5,7 @@ import com.pascalwelsch.konduit.widget.ProgressBarWidget
 import com.pascalwelsch.konduit.widget.Widget
 
 class ProgressBarBinding(private val progressBar: ProgressBar) : AndroidViewBinding {
-    override fun bind(widget: Widget) {
+    override fun onChanged(widget: Widget) {
         if (widget !is ProgressBarWidget) return
 
         progressBar.progress = Math.round(widget.progress * progressBar.max)

@@ -33,7 +33,7 @@ import java.util.WeakHashMap
 
 class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
 
-    override fun bind(widget: Widget) {
+    override fun onChanged(widget: Widget) {
         if (widget is TextWidget) {
 
             textView.setTextWhenChanged(widget.text)

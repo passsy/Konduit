@@ -39,9 +39,9 @@ import java.util.Collections.emptyList
 import java.util.Locale
 
 private val TAG = AndroidViewRenderer::class.java.simpleName
-private val DEBUG = false
+private val DEBUG = true
 
-open class AndroidViewRenderer(private val activity: Activity, private val ui: KonduitUI) : KonduitView {
+open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 
     fun autobindAllViews(view: View) {
         view.flatChildren.filter { it.id > 0 }.forEach { v ->
@@ -70,12 +70,19 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
         autoBindings.forEach { binding -> binding(view, { bindings.add(it) }) }
     }
 
-    inline fun <reified W : Widget> bind(view: View, crossinline block: (W) -> Unit) {
-        Log.v("Bind", "bind ${view.javaClass.simpleName} $view")
-        bind(view.id, block)
+    inline fun <reified W : Widget> bind(view: View,
+            crossinline onChange: (W) -> Unit,
+            noinline onAdded: ((W) -> Unit)? = null,
+            noinline onRemoved: ((W) -> Unit)? = null){
+        Log.v("Bind", "onChanged ${view.javaClass.simpleName} $view")
+        bind(view.id, onChange, onAdded, onRemoved)
     }
 
-    inline fun <reified W : Widget> bind(key: Any, crossinline block: (W) -> Unit) {
+    inline fun <reified W : Widget> bind(
+            key: Any,
+            crossinline onChange: (W) -> Unit,
+            noinline onAdded: ((W) -> Unit)? = null,
+            noinline onRemoved: ((W) -> Unit)? = null) {
         val bindings = bindingsFor(key)
 
         if (bindings.count() > 0) {
@@ -84,9 +91,27 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
         }
 
         bindings.add(object : AndroidViewBinding {
-            override fun bind(widget: Widget) {
+            override fun onChanged(widget: Widget) {
                 if (widget is W) {
-                    block(widget)
+                    onChange(widget)
+                } else {
+                    throw IllegalStateException(
+                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
+                }
+            }
+
+            override fun onAdded(widget: Widget) {
+                if (widget is W) {
+                    onAdded?.invoke(widget)
+                } else {
+                    throw IllegalStateException(
+                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
+                }
+            }
+
+            override fun onRemoved(widget: Widget) {
+                if (widget is W) {
+                    onRemoved?.invoke(widget)
                 } else {
                     throw IllegalStateException(
                             "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
@@ -195,34 +220,34 @@ open class AndroidViewRenderer(private val activity: Activity, private val ui: K
         }
     }
 
-    open protected fun onWidgetRemoved(widget: Widget) {
+    protected open fun onWidgetRemoved(widget: Widget) {
         if (DEBUG) Log.v(TAG, "removed $widget")
-        ui.onWidgetRemoved(widget)
+        widget.bindingsForEach { it.onRemoved(widget) }
     }
 
-    open protected fun onWidgetAdded(widget: Widget) {
+    protected open fun onWidgetAdded(widget: Widget) {
         if (DEBUG) Log.v(TAG, "added $widget")
-        ui.onWidgetAdded(widget)
-        matchAndBind(widget)
-    }
-
-    open protected fun onWidgetChanged(widget: Widget) {
-        if (DEBUG) Log.v(TAG, "changed $widget")
-        matchAndBind(widget)
-    }
-
-    private fun matchAndBind(widget: Widget?) {
-        if (widget == null) return
-
-        val bindings = viewBindings[widget.key]
-        if (bindings == null || bindings.isEmpty()) {
-            throw IllegalStateException("widget $widget cannot be bound. " +
-                    "No binding exists for key ${resIdName(widget.key!!)}")
+        widget.bindingsForEach {
+            it.onAdded(widget)
+            it.onChanged(widget)
         }
-        bindings.forEach { it.bind(widget) }
     }
 
-    fun resIdName(key: Any?): String? {
+    protected open fun onWidgetChanged(widget: Widget) {
+        if (DEBUG) Log.v(TAG, "changed $widget")
+        widget.bindingsForEach { it.onChanged(widget) }
+    }
+
+    private fun Widget.bindingsForEach(block: (AndroidViewBinding) -> Unit) {
+        val bindings = viewBindings[key]
+        if (bindings == null || bindings.isEmpty()) {
+            throw IllegalStateException("widget ${this} cannot be bound. " +
+                    "No binding exists for key ${resIdName(key!!)}")
+        }
+        bindings.forEach(block)
+    }
+
+    private fun resIdName(key: Any?): String? {
         if (key == null) return null
 
         // prettify android resource ids

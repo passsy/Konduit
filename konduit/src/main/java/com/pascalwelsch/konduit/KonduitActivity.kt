@@ -30,7 +30,7 @@ abstract class KonduitActivity<P : KonduitPresenter<V>, V : KonduitView> : TiAct
 
     @Suppress("MemberVisibilityCanBePrivate")
     protected val renderer by lazy {
-        AndroidViewRenderer(this@KonduitActivity, this@KonduitActivity)
+        AndroidViewRenderer(this@KonduitActivity)
     }
 
     override fun getBuildContext(): BuildContext {
@@ -42,14 +42,14 @@ abstract class KonduitActivity<P : KonduitPresenter<V>, V : KonduitView> : TiAct
     }
 
     /**
-     * called before [onStart] to bind all views. Override this method to change the default binding behaviour
+     * called before [onStart] to onChanged all views. Override this method to change the default binding behaviour
      */
     protected open fun onBindAllViews() {
         renderer.autobindAllViews(window.decorView)
     }
 
     override fun onStart() {
-        // bind all views (by default) which will become visible soon
+        // onChanged all views (by default) which will become visible soon
         onBindAllViews()
         super.onStart()
     }
@@ -69,7 +69,7 @@ abstract class KonduitActivity<P : KonduitPresenter<V>, V : KonduitView> : TiAct
         if (viewId is Int) {
             if (viewId > 0) {
                 return parent.findViewById(viewId) ?: throw IllegalStateException(
-                        "View (id=$viewId) not found to bind widget $this. " +
+                        "View (id=$viewId) not found to onChanged widget $this. " +
                                 "Make sure the view was created in onWidgetAdded(Widget)")
             }
         }
@@ -91,6 +91,6 @@ interface KonduitUI {
      */
     fun onWidgetRemoved(widget: Widget)
 
-    // instead of a global changed event, register a binding with [renderer.bind] for this widget
+    // instead of a global changed event, register a binding with [renderer.onChanged] for this widget
     //fun onWidgetChanged(widget: Widget)
 }

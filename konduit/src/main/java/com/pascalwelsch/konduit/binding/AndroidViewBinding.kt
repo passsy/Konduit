@@ -18,9 +18,27 @@ package com.pascalwelsch.konduit.binding
 import com.pascalwelsch.konduit.widget.Widget
 
 /**
- * Will be called to bind a widget to an arbitrary android view. This is the only connection between the two worlds
+ * Will be called to onChanged a widget to an arbitrary android view. This is the only connection between the two worlds
  */
 interface AndroidViewBinding {
 
-    fun bind(widget: Widget)
+    /**
+     * Called when the [Widget] first appears, should show or initialize the View which should be mapped to this [Widget]
+     * [onChanged] will be called directly afterwards
+     */
+    fun onAdded(widget: Widget) {
+        // noop
+    }
+
+    /**
+     * Called when the [Widget] changes, apply the new values to the bound View
+     */
+    fun onChanged(widget: Widget)
+
+    /**
+     * The [Widget] was removed, also remove the View
+     */
+    fun onRemoved(widget: Widget) {
+        // noop
+    }
 }

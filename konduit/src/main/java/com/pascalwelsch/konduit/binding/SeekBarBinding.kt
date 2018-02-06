@@ -6,7 +6,7 @@ import com.pascalwelsch.konduit.widget.SeekBarWidget
 import com.pascalwelsch.konduit.widget.Widget
 
 class SeekBarBinding(private val seekbar: SeekBar) : AndroidViewBinding {
-    override fun bind(widget: Widget) {
+    override fun onChanged(widget: Widget) {
         if (widget !is SeekBarWidget) return
         seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
 
