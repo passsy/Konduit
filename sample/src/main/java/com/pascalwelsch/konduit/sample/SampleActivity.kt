@@ -34,7 +34,7 @@ class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
 
         renderer.bind<FriendAlertWidget>(friendDialogKey) { widget ->
             alertDialog?.setMessage(widget.message)
-            alertDialog?.setOnDismissListener { widget.onCancel?.invoke() }
+            alertDialog?.setOnDismissListener { widget.onDismiss?.invoke() }
         }
     }
 

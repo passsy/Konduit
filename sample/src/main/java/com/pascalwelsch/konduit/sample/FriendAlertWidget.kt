@@ -28,27 +28,21 @@ class FriendAlertWidget : Widget() {
             field = value
         }
 
-    open var onCancel: (() -> Unit)? = null
-        set(value) {
-            checkWritability()
-            field = value
-        }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is FriendAlertWidget) return false
         if (!super.equals(other)) return false
 
+        if (message != other.message) return false
         if (onDismiss != other.onDismiss) return false
-        if (onCancel != other.onCancel) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
+        result = 31 * result + (message?.hashCode() ?: 0)
         result = 31 * result + (onDismiss?.hashCode() ?: 0)
-        result = 31 * result + (onCancel?.hashCode() ?: 0)
         return result
     }
 }

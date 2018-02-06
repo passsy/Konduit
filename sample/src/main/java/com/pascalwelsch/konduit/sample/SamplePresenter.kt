@@ -62,7 +62,7 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
                     // custom callback. Also notice the inline lambda. It is not ideal because this lambda
                     // will make the widget never be equal to any other widget and therefore the
                     // bind method will always called whenever build(BuildContext) is called.
-                    onCancel = {
+                    onDismiss = {
                         setState {
                             showFriedDialog = false
                         }
@@ -75,7 +75,7 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
     private val onInputTextChanged = { text: String ->
         setState {
             userInput = text
-            if ("friend" == userInput) {
+            if (userInput.endsWith("friend")) {
                 showFriedDialog = true
             }
         }
