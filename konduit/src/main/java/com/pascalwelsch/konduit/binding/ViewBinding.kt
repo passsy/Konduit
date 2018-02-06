@@ -15,7 +15,6 @@
 
 package com.pascalwelsch.konduit.binding
 
-import android.databinding.adapters.ViewBindingAdapter
 import android.view.View
 import android.widget.AdapterView
 import com.pascalwelsch.konduit.widget.Widget
@@ -31,7 +30,8 @@ class ViewBinding(private val view: View) : AndroidViewBinding {
 
         if (view !is AdapterView<*>) {
             val clickListener = widget.onClick?.let { click -> View.OnClickListener { click.invoke() } }
-            ViewBindingAdapter.setClickListener(view, clickListener, true)
+            view.setOnClickListener(clickListener)
+            view.isClickable = clickListener != null
         }
     }
 }

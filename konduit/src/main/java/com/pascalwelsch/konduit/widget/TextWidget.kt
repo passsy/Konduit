@@ -34,6 +34,12 @@ open class TextWidget : Widget() {
             field = value
         }
 
+    open var hint: String? = null
+        set(value) {
+            checkWritability()
+            field = value
+        }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is TextWidget) return false
@@ -41,6 +47,8 @@ open class TextWidget : Widget() {
 
         if (text != other.text) return false
         if (onTextChanged != other.onTextChanged) return false
+        if (maxLength != other.maxLength) return false
+        if (hint != other.hint) return false
 
         return true
     }
@@ -49,6 +57,8 @@ open class TextWidget : Widget() {
         var result = super.hashCode()
         result = 31 * result + (text?.hashCode() ?: 0)
         result = 31 * result + (onTextChanged?.hashCode() ?: 0)
+        result = 31 * result + (maxLength ?: 0)
+        result = 31 * result + (hint?.hashCode() ?: 0)
         return result
     }
 }
