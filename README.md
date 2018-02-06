@@ -83,8 +83,7 @@ When it comes to i18n this can be hard to achieve.
 
 ```gradle
 repositories {
-    // until available at jcenter
-    maven { url "http://dl.bintray.com/passsy/maven" }
+    jcenter()
 }
 
 dependencies {
