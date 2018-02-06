@@ -32,7 +32,7 @@ class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        renderer.bind<FriendAlertWidget>("friend dialog") { widget ->
+        renderer.bind<FriendAlertWidget>(friendDialogKey) { widget ->
             alertDialog?.setMessage(widget.message)
             alertDialog?.setOnDismissListener { widget.onCancel?.invoke() }
         }
@@ -43,7 +43,9 @@ class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
         when (widget.key) {
             friendDialogKey -> {
                 alertDialog = Builder(this)
-                        .setMessage("Welcome Friend")
+                        // set a fake message so the alert dialog adds the message field which
+                        // will be filled later when binding the widget to the view
+                        .setMessage("")
                         .setPositiveButton("Cool", null)
                         .create()
                 alertDialog?.show()

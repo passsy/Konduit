@@ -15,4 +15,5 @@
 
 <resources>
     <string name="app_name">Konduit</string>
+    <string name="please_click_increment_alert_msg">"Click INCREMENT first!"</string>
 </resources>

@@ -53,10 +53,15 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
                 friendAlert {
                     key = friendDialogKey
                     message = if (count > 0) {
+                        // either write the text manually
                         "Thanks for clicking $count times, friend!"
                     } else {
-                        "Click INCREMENT first!"
+                        // or get it from the resources using the BuildContext
+                        context.getString(R.string.please_click_increment_alert_msg)
                     }
+                    // custom callback. Also notice the inline lambda. It is not ideal because this lambda
+                    // will make the widget never be equal to any other widget and therefore the
+                    // bind method will always called whenever build(BuildContext) is called.
                     onCancel = {
                         setState {
                             showFriedDialog = false
