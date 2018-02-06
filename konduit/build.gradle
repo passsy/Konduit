@@ -4,24 +4,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'jacoco'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "0.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        consumerProguardFiles 'proguard-rules.pro'
     }
-    buildTypes {
-        debug {
-            consumerProguardFiles 'proguard-rules.pro'
-        }
-        release {
-            consumerProguardFiles 'proguard-rules.pro'
-        }
-    }
+
     lintOptions {
         abortOnError false
     }
@@ -37,13 +31,13 @@ dependencies {
     def thirtyinchVersion = '0.8.5'
     api "net.grandcentrix.thirtyinch:thirtyinch:$thirtyinchVersion"
 
-    def supportLibVersion = "26.1.0"
+    def supportLibVersion = "27.0.2"
     compileOnly "com.android.support:support-annotations:$supportLibVersion"
     compileOnly "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:support-v4:$supportLibVersion"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation 'org.assertj:assertj-core:3.9.0'
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
