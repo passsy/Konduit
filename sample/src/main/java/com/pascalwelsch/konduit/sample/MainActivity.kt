@@ -16,21 +16,57 @@
 package com.pascalwelsch.konduit.sample
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AlertDialog.Builder
 import com.pascalwelsch.konduit.BuildContext
 import com.pascalwelsch.konduit.KonduitActivity
 import com.pascalwelsch.konduit.KonduitPresenter
 import com.pascalwelsch.konduit.KonduitView
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.button
+import com.pascalwelsch.konduit.widget.input
 import com.pascalwelsch.konduit.widget.progressBar
 import com.pascalwelsch.konduit.widget.text
 import com.pascalwelsch.konduit.widget.widgetList
 
 class MainActivity : KonduitActivity<MainPresenter, KonduitView>() {
 
+    private var alertDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        renderer.bind<FriendAlertWidget>("friend dialog") { widget ->
+            alertDialog?.setMessage(widget.message)
+            alertDialog?.setOnDismissListener { widget.onCancel?.invoke() }
+        }
+    }
+
+    override fun onWidgetAdded(widget: Widget) {
+        super.onWidgetAdded(widget)
+        when (widget.key) {
+            "friend dialog" -> {
+                alertDialog = Builder(this)
+                        .setMessage("Welcome Friend")
+                        .setPositiveButton("Cool") { d, i ->
+
+                        }
+                        .create()
+                alertDialog?.show()
+            }
+        }
+    }
+
+    override fun onWidgetRemoved(widget: Widget) {
+        super.onWidgetRemoved(widget)
+
+        when (widget.key) {
+            "friend dialog" -> {
+                alertDialog?.dismiss()
+                alertDialog = null
+            }
+        }
     }
 
     override fun providePresenter() = MainPresenter()
@@ -41,6 +77,10 @@ class MainPresenter : KonduitPresenter<KonduitView>() {
     private var count = 0
 
     private var myProgress = 0
+
+    private var userInput = ""
+
+    private var showFriedDialog = false
 
     override fun build(context: BuildContext): List<Widget> {
         return widgetList {
@@ -59,6 +99,38 @@ class MainPresenter : KonduitPresenter<KonduitView>() {
             progressBar {
                 key = R.id.progress_bar
                 progress = myProgress / 10f
+            }
+
+            input {
+                key = R.id.text_input
+                hint = "Write 'friend' and see magic happen"
+                text = userInput
+                onTextChanged = onInputTextChanged
+            }
+
+            if (showFriedDialog) {
+                friendAlert {
+                    key = "friend dialog"
+                    message = if (count > 0) {
+                        "Thanks for clicking $count times, friend!"
+                    } else {
+                        "Click INCREMENT first!"
+                    }
+                    onCancel = {
+                        setState {
+                            showFriedDialog = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private val onInputTextChanged = { text: String ->
+        setState {
+            userInput = text
+            if ("friend" == userInput) {
+                showFriedDialog = true
             }
         }
     }
