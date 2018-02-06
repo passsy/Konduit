@@ -27,7 +27,7 @@ class MainPresenterTest {
 
     @Test
     fun `button click increments`() {
-        val ui = MainPresenter().testUi()
+        val ui = SamplePresenter().testUi()
 
         // Given the UI shows the initial state
         assertThat(ui.widget<TextWidget>(R.id.counter_label).text).contains("0")
@@ -41,7 +41,7 @@ class MainPresenterTest {
 
     @Test
     fun `progress bar jumps to 0 after 10 clicks`() {
-        val ui = MainPresenter().testUi()
+        val ui = SamplePresenter().testUi()
 
         // Given the UI shows the initial state
         assertThat(ui.widget<ProgressBarWidget>(R.id.progress_bar).progress).isEqualTo(0f)
