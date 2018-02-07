@@ -1,22 +1,31 @@
 package com.pascalwelsch.konduit.binding
 
+import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
-import com.pascalwelsch.konduit.AndroidViewBinding
+import com.pascalwelsch.konduit.ViewBinding
+import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.SeekBarWidget
-import com.pascalwelsch.konduit.widget.Widget
 
-class SeekBarBinding(private val seekbar: SeekBar) : AndroidViewBinding {
-    override fun onAdded(widget: Widget) {
+class SeekBarBindingBindingAdapters : ViewBindingAdapters {
+    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+        if (view is SeekBar) {
+            emit(SeekBarBinding(view))
+        }
+    }
+}
+
+class SeekBarBinding(private val seekbar: SeekBar) : ViewBinding<SeekBarWidget> {
+
+    override fun onAdded(widget: SeekBarWidget) {
     }
 
-    override fun onRemoved(widget: Widget) {
+    override fun onRemoved(widget: SeekBarWidget) {
         // can't restore the onChanged listener
         seekbar.setOnSeekBarChangeListener(null)
     }
 
-    override fun onChanged(widget: Widget) {
-        if (widget !is SeekBarWidget) return
+    override fun onChanged(widget: SeekBarWidget) {
         seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

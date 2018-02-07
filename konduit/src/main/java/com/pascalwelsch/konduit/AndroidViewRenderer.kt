@@ -23,117 +23,37 @@ import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.SeekBar
-import android.widget.Switch
-import android.widget.TextView
-import com.pascalwelsch.konduit.binding.ProgressBarBinding
-import com.pascalwelsch.konduit.binding.SeekBarBinding
-import com.pascalwelsch.konduit.binding.SwitchBinding
-import com.pascalwelsch.konduit.binding.TextViewBinding
-import com.pascalwelsch.konduit.binding.ViewBinding
+import com.pascalwelsch.konduit.binding.ProgressBarBindingBindingAdapters
+import com.pascalwelsch.konduit.binding.SeekBarBindingBindingAdapters
+import com.pascalwelsch.konduit.binding.SwitchBindingBindingAdapters
+import com.pascalwelsch.konduit.binding.TextViewBindingBindingAdapters
+import com.pascalwelsch.konduit.binding.ViewBindingBindingAdapters
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
 import java.util.Locale
 
 private val TAG = AndroidViewRenderer::class.java.simpleName
-private val DEBUG = true
+private const val DEBUG = false
 
-open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
+interface IAndroidViewRenderer {
+    val adapters: MutableList<ViewBindingAdapters>
+    fun autobindAllViews(view: View)
+    fun autobind(view: View)
+    fun bindingsFor(key: Any): MutableList<ViewBinding<*>>
+}
 
-    fun autobindAllViews(view: View) {
-        view.flatChildren.filter { it.id > 0 }.forEach { v ->
-            autobind(v)
-        }
-    }
-
-    val autoBindings = mutableListOf<(View, add: (AndroidViewBinding) -> Unit) -> Unit>(
-            { view, add -> add(ViewBinding(view)) },
-            { view, add -> if (view is TextView) add(TextViewBinding(view)) },
-            { view, add -> if (view is Switch) add(SwitchBinding(view)) },
-            { view, add -> if (view is ProgressBar) add(ProgressBarBinding(view)) },
-            { view, add -> if (view is SeekBar) add(SeekBarBinding(view)) }
-    )
-
-    fun autobind(view: View) {
-        val bindings = bindingsFor(view)
-
-        Log.v("Bind", "autobinding $view")
-        if (bindings.count() > 0) {
-            Log.v("Bind", " - ${view.javaClass.simpleName} already has ${bindings.count()} bindings")
-            Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
-        }
-
-        // add matching auto bindings
-        autoBindings.forEach { binding -> binding(view, { bindings.add(it) }) }
-    }
-
-    inline fun <reified W : Widget> bind(view: View,
-            crossinline onChange: (W) -> Unit,
-            noinline onAdded: ((W) -> Unit)? = null,
-            noinline onRemoved: ((W) -> Unit)? = null) {
-        Log.v("Bind", "onChanged ${view.javaClass.simpleName} $view")
-        bind(view.id, onChange, onAdded, onRemoved)
-    }
-
-    inline fun <reified W : Widget> bind(
-            key: Any,
-            crossinline onChange: (W) -> Unit,
-            noinline onAdded: ((W) -> Unit)? = null,
-            noinline onRemoved: ((W) -> Unit)? = null) {
-
-        val bindings = bindingsFor(key)
-
-        if (bindings.count() > 0) {
-            Log.v("Bind", " - $key already has ${bindings.count()} bindings")
-            Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
-        }
-
-        bindings.add(object : AndroidViewBinding {
-            override fun onChanged(widget: Widget) {
-                if (widget is W) {
-                    onChange(widget)
-                } else {
-                    throw IllegalStateException(
-                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
-                }
-            }
-
-            override fun onAdded(widget: Widget) {
-                if (widget is W) {
-                    onAdded?.invoke(widget)
-                } else {
-                    throw IllegalStateException(
-                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
-                }
-            }
-
-            override fun onRemoved(widget: Widget) {
-                if (widget is W) {
-                    onRemoved?.invoke(widget)
-                } else {
-                    throw IllegalStateException(
-                            "Internal error, triggered binding for the wrong binding adapter. key: $key, widget: $widget")
-                }
-            }
-        })
-    }
+open class AndroidViewRenderer(private val activity: Activity) : KonduitView, IAndroidViewRenderer {
+    override val adapters = mutableListOf(
+            ViewBindingBindingAdapters(),
+            TextViewBindingBindingAdapters(),
+            SwitchBindingBindingAdapters(),
+            ProgressBarBindingBindingAdapters(),
+            SeekBarBindingBindingAdapters())
 
     private var lastRenderedWidgets: List<Widget> = emptyList()
 
-    private val viewBindings: HashMap<Any, MutableList<AndroidViewBinding>> = hashMapOf()
-
-    fun bindingsFor(key: Any): MutableList<AndroidViewBinding> {
-        val id = if (key is View) key.id else key
-
-        val bindings = viewBindings[id]
-        if (bindings != null) return bindings
-
-        val newBindings = mutableListOf<AndroidViewBinding>()
-        viewBindings[id] = newBindings
-        return newBindings
-    }
+    private val viewBindings: HashMap<Any, MutableList<ViewBinding<*>>> = hashMapOf()
 
     @Synchronized
     override fun render(widgets: List<Widget>) {
@@ -169,16 +89,22 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
         lastRenderedWidgets = widgets
 
         activity.runOnUiThread {
-            removed.forEach {
-                onWidgetRemoved(it)
+            removed.forEach { widget ->
+                if (DEBUG) Log.v(TAG, "removed $widget")
+                widget.bindingsForEach { it.onRemoved(widget) }
             }
 
-            added.forEach {
-                onWidgetAdded(it)
+            added.forEach { widget ->
+                if (DEBUG) Log.v(TAG, "added $widget")
+                widget.bindingsForEach {
+                    it.onAdded(widget)
+                    it.onChanged(widget)
+                }
             }
 
-            changed.forEach {
-                onWidgetChanged(it)
+            changed.forEach { widget ->
+                if (DEBUG) Log.v(TAG, "changed $widget")
+                widget.bindingsForEach { it.onChanged(widget) }
             }
         }
     }
@@ -226,31 +152,45 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
         }
     }
 
-    protected open fun onWidgetRemoved(widget: Widget) {
-        if (DEBUG) Log.v(TAG, "removed $widget")
-        widget.bindingsForEach { it.onRemoved(widget) }
+    override fun bindingsFor(key: Any): MutableList<ViewBinding<*>> {
+        val id = if (key is View) key.id else key
+
+        val bindings = viewBindings[id]
+        if (bindings != null) return bindings
+
+        val newBindings = mutableListOf<ViewBinding<*>>()
+        viewBindings[id] = newBindings
+        return newBindings
     }
 
-    protected open fun onWidgetAdded(widget: Widget) {
-        if (DEBUG) Log.v(TAG, "added $widget")
-        widget.bindingsForEach {
-            it.onAdded(widget)
-            it.onChanged(widget)
+    override fun autobindAllViews(view: View) {
+        view.flatChildren.filter { it.id > 0 }.forEach { v ->
+            autobind(v)
         }
     }
 
-    protected open fun onWidgetChanged(widget: Widget) {
-        if (DEBUG) Log.v(TAG, "changed $widget")
-        widget.bindingsForEach { it.onChanged(widget) }
+    override fun autobind(view: View) {
+        val bindings = bindingsFor(view)
+
+        Log.v("Bind", "autobinding $view")
+        if (bindings.count() > 0) {
+            Log.v("Bind", " - ${view.javaClass.simpleName} already has ${bindings.count()} bindings")
+            Log.v("Bind", " - bindings: ${bindings.joinToString("\n")}")
+        }
+
+        // add matching auto bindings
+        this.adapters.forEach { adapter -> adapter.createBinding(view, { bindings.add(it) }) }
     }
 
-    private fun Widget.bindingsForEach(block: (AndroidViewBinding) -> Unit) {
+    private fun <T : Widget> T.bindingsForEach(block: (ViewBinding<T>) -> Unit) {
         val bindings = viewBindings[key]
         if (bindings == null || bindings.isEmpty()) {
             throw IllegalStateException("widget ${this} cannot be bound. " +
                     "No binding exists for key ${resIdName(key!!)}")
         }
-        bindings.forEach(block)
+        bindings.forEach {
+            block(it as ViewBinding<T>)
+        }
     }
 
     private fun resIdName(key: Any?): String? {
@@ -284,9 +224,20 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 }
 
 /**
+ * Factory to create a [ViewBinding]
+ */
+interface ViewBindingAdapters {
+
+    /**
+     * call [emit] with a
+     */
+    fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit)
+}
+
+/**
  * Will be called to onChanged a widget to an arbitrary android view. This is the only connection between the two worlds
  */
-interface AndroidViewBinding {
+interface ViewBinding<in W : Widget> {
 
     /**
      * Called when the [Widget] first appears. This is where dynamic views have to be initialized and added to
@@ -294,24 +245,24 @@ interface AndroidViewBinding {
      *
      * [onChanged] will be called directly afterwards, no need to bind everything here
      */
-    fun onAdded(widget: Widget)
+    fun onAdded(widget: W)
 
     /**
      * Called when the [Widget] changes, apply the new values to the bound View
      */
-    fun onChanged(widget: Widget)
+    fun onChanged(widget: W)
 
     /**
      * The [Widget] was removed, also remove the View or restore the previously saved values
      */
-    fun onRemoved(widget: Widget)
+    fun onRemoved(widget: W)
 }
 
 private inline val View.flatChildren: List<View>
     get() = if (this !is ViewGroup) {
         emptyList<View>()
     } else {
-        (0..childCount - 1)
+        (0 until childCount)
                 .map { getChildAt(it) }
                 .flatMap { listOf(it) + it.flatChildren }
     }

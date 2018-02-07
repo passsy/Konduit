@@ -25,28 +25,36 @@ import android.text.TextWatcher
 import android.util.SparseArray
 import android.view.View
 import android.widget.TextView
-import com.pascalwelsch.konduit.AndroidViewBinding
 import com.pascalwelsch.konduit.R
+import com.pascalwelsch.konduit.ViewBinding
+import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.TextWidget
-import com.pascalwelsch.konduit.widget.Widget
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
+class TextViewBindingBindingAdapters : ViewBindingAdapters {
+    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+        if (view is TextView) {
+            emit(TextViewBinding(view))
+        }
+    }
+}
+
 @Suppress("UNCHECKED_CAST")
-class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
+private class TextViewBinding(private val textView: TextView) : ViewBinding<TextWidget> {
 
     private var initialText: CharSequence? = null
     private var initialHint: CharSequence? = null
     private var initialFilters: Array<InputFilter>? = null
 
-    override fun onAdded(widget: Widget) {
+    override fun onAdded(widget: TextWidget) {
         initialText = textView.text
         initialHint = textView.hint
         // save maxLength and more with filters
         initialFilters = textView.filters.copyOf()
     }
 
-    override fun onRemoved(widget: Widget) {
+    override fun onRemoved(widget: TextWidget) {
         textView.text = initialText
         textView.hint = initialHint
         // setting it to null removes the watcher
@@ -55,17 +63,14 @@ class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
         textView.filters = initialFilters
     }
 
-    override fun onChanged(widget: Widget) {
-        if (widget is TextWidget) {
+    override fun onChanged(widget: TextWidget) {
+        textView.setTextWhenChanged(widget.text)
+        textView.setHintTextWhenChanged(widget.hint)
 
-            textView.setTextWhenChanged(widget.text)
-            textView.setHintTextWhenChanged(widget.hint)
+        val onChangeListener = widget.onTextChanged?.let { { text: Editable -> it.invoke(text.toString()) } }
+        textView.setTextWatcher(after = onChangeListener)
 
-            val onChangeListener = widget.onTextChanged?.let { { text: Editable -> it.invoke(text.toString()) } }
-            textView.setTextWatcher(after = onChangeListener)
-
-            textView.setMaxLength(widget.maxLength ?: Int.MAX_VALUE)
-        }
+        textView.setMaxLength(widget.maxLength ?: Int.MAX_VALUE)
     }
 
     // Helper functions from android.databinding.adapters.TextViewBindingAdapter
