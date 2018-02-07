@@ -5,19 +5,18 @@ import android.os.Build.VERSION_CODES
 import android.view.View
 import android.widget.ProgressBar
 import com.pascalwelsch.konduit.ViewBinding
-import com.pascalwelsch.konduit.ViewBindingAdapters
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.ProgressBarWidget
 
-class ProgressBarBindingAdapters : ViewBindingAdapters {
-    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+class ProgressBarBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) {
         if (view is ProgressBar) {
-            emit(ProgressBarBinding(view))
+            bindWith(ProgressBarBinding(view))
         }
     }
 }
 
-private class ProgressBarBinding(private val progressBar: ProgressBar) :
-        ViewBinding<ProgressBarWidget> {
+private class ProgressBarBinding(private val progressBar: ProgressBar) : ViewBinding<ProgressBarWidget> {
 
     private var initialState: ProgressBarWidget? = null
 

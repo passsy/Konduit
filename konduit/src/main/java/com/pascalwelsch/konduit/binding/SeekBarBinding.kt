@@ -4,13 +4,13 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import com.pascalwelsch.konduit.ViewBinding
-import com.pascalwelsch.konduit.ViewBindingAdapters
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.SeekBarWidget
 
-class SeekBarBindingAdapters : ViewBindingAdapters {
-    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+class SeekBarBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) {
         if (view is SeekBar) {
-            emit(SeekBarBinding(view))
+            bindWith(SeekBarBinding(view))
         }
     }
 }

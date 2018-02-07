@@ -21,11 +21,11 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.pascalwelsch.konduit.ViewBinding
-import com.pascalwelsch.konduit.ViewBindingAdapters
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.Widget
 
-class ViewBindingAdapters : ViewBindingAdapters {
-    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) = emit(ViewBinding(view))
+class ViewBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) = bindWith(ViewBinding(view))
 }
 
 private class ViewBinding(private val view: View) : ViewBinding<Widget> {

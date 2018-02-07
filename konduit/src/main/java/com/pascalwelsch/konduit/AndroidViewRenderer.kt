@@ -23,11 +23,11 @@ import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import com.pascalwelsch.konduit.binding.ProgressBarBindingAdapters
-import com.pascalwelsch.konduit.binding.SeekBarBindingAdapters
-import com.pascalwelsch.konduit.binding.SwitchBindingAdapters
-import com.pascalwelsch.konduit.binding.TextViewBindingAdapters
-import com.pascalwelsch.konduit.binding.ViewBindingAdapters
+import com.pascalwelsch.konduit.binding.ProgressBarBindingAdapter
+import com.pascalwelsch.konduit.binding.SeekBarBindingAdapter
+import com.pascalwelsch.konduit.binding.SwitchBindingAdapter
+import com.pascalwelsch.konduit.binding.TextViewBindingAdapter
+import com.pascalwelsch.konduit.binding.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
@@ -46,11 +46,11 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
      * all registered adapters. feel free to add and remove adapters
      */
     val adapters = mutableListOf(
-            ViewBindingAdapters(),
-            TextViewBindingAdapters(),
-            SwitchBindingAdapters(),
-            ProgressBarBindingAdapters(),
-            SeekBarBindingAdapters())
+            ViewBindingAdapter(),
+            TextViewBindingAdapter(),
+            SwitchBindingAdapter(),
+            ProgressBarBindingAdapter(),
+            SeekBarBindingAdapter())
 
     @Synchronized
     override fun render(widgets: List<Widget>) {
@@ -223,12 +223,12 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 /**
  * Factory to create a [ViewBinding]
  */
-interface ViewBindingAdapters {
+interface ViewBindingAdapter {
 
     /**
-     * call [emit] with a
+     * call [bindWith] with a new [ViewBinding] for [Widget] which can be handled, do nothing for non matching ones.
      */
-    fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit)
+    fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit)
 }
 
 /**

@@ -3,13 +3,13 @@ package com.pascalwelsch.konduit.binding
 import android.view.View
 import android.widget.Switch
 import com.pascalwelsch.konduit.ViewBinding
-import com.pascalwelsch.konduit.ViewBindingAdapters
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.SwitchWidget
 
-class SwitchBindingAdapters : ViewBindingAdapters {
-    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+class SwitchBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) {
         if (view is Switch) {
-            emit(SwitchBinding(view))
+            bindWith(SwitchBinding(view))
         }
     }
 }

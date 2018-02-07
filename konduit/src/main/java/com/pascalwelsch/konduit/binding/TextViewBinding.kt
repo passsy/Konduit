@@ -27,15 +27,15 @@ import android.view.View
 import android.widget.TextView
 import com.pascalwelsch.konduit.R
 import com.pascalwelsch.konduit.ViewBinding
-import com.pascalwelsch.konduit.ViewBindingAdapters
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.TextWidget
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
-class TextViewBindingAdapters : ViewBindingAdapters {
-    override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
+class TextViewBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) {
         if (view is TextView) {
-            emit(TextViewBinding(view))
+            bindWith(TextViewBinding(view))
         }
     }
 }
