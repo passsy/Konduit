@@ -29,8 +29,6 @@ private class SwitchBinding(private val switch: Switch) : ViewBinding<SwitchWidg
     }
 
     override fun onChanged(widget: SwitchWidget) {
-        if (widget !is SwitchWidget) return
-
         switch.setOnCheckedChangeListener(null)
         switch.isChecked = widget.checked
         switch.setOnCheckedChangeListener { _, checked -> widget.onSwitch?.invoke(checked) }

@@ -186,6 +186,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
                     "No binding exists for key ${resIdName(key!!)}")
         }
         bindings.forEach {
+            @Suppress("UNCHECKED_CAST")
             block(it as ViewBinding<T>)
         }
     }
