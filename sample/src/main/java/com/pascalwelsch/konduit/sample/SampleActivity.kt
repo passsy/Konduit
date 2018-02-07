@@ -17,11 +17,13 @@ package com.pascalwelsch.konduit.sample
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AlertDialog.Builder
 import com.pascalwelsch.konduit.KonduitActivity
 import com.pascalwelsch.konduit.KonduitView
 import com.pascalwelsch.konduit.ViewBinding
+import com.pascalwelsch.konduit.widget.Widget
 
 class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
 
@@ -32,6 +34,27 @@ class SampleActivity : KonduitActivity<SamplePresenter, KonduitView>() {
         setContentView(R.layout.activity_main)
 
         bind(friendDialogKey, FriendAlertBinding(this))
+        bind(sampleFragment, object : ViewBinding<Widget> {
+            private var fragment: Fragment? = null
+
+            override fun onAdded(widget: Widget) {
+                fragment = SampleFragment()
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .commitAllowingStateLoss()
+
+            }
+
+            override fun onChanged(widget: Widget) {
+
+            }
+
+            override fun onRemoved(widget: Widget) {
+                supportFragmentManager.beginTransaction()
+                        .remove(fragment)
+                        .commitAllowingStateLoss()
+            }
+        })
     }
 }
 

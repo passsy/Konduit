@@ -22,10 +22,14 @@ import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.button
 import com.pascalwelsch.konduit.widget.input
 import com.pascalwelsch.konduit.widget.progressBar
+import com.pascalwelsch.konduit.widget.switch
 import com.pascalwelsch.konduit.widget.text
+import com.pascalwelsch.konduit.widget.widget
 import com.pascalwelsch.konduit.widget.widgetList
 
 internal const val friendDialogKey = "friend dialog"
+
+internal const val sampleFragment =  "sample fragment"
 
 class SamplePresenter : KonduitPresenter<KonduitView>() {
 
@@ -37,7 +41,26 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
 
     private var showFriedDialog = false
 
+    private var useFragment = false
+
     override fun build(context: BuildContext): List<Widget> {
+        if (useFragment) return widgetList {
+            widget {
+                key = sampleFragment
+            }
+
+            switch {
+                key = R.id.fragment_switch
+                checked = useFragment
+                text = "close fragment"
+                onSwitch = { on ->
+                    setState {
+                        useFragment = on
+                    }
+                }
+            }
+        }
+
         return widgetList {
 
             text {
@@ -85,6 +108,17 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
                         setState {
                             showFriedDialog = false
                         }
+                    }
+                }
+            }
+
+            switch {
+                key = R.id.fragment_switch
+                checked = useFragment
+                text = "use fragment"
+                onSwitch = { on ->
+                    setState {
+                        useFragment = on
                     }
                 }
             }

@@ -36,7 +36,9 @@ import java.util.Locale
 private val TAG = AndroidViewRenderer::class.java.simpleName
 private const val DEBUG = false
 
-open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
+open class AndroidViewRenderer : KonduitView {
+
+    var activity: Activity? = null
 
     private var lastRenderedWidgets: List<Widget> = emptyList()
 
@@ -85,7 +87,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
         // save for next render
         lastRenderedWidgets = widgets
 
-        activity.runOnUiThread {
+        activity?.runOnUiThread {
             removed.forEach { widget ->
                 if (DEBUG) Log.v(TAG, "removed $widget")
                 widget.bindingsForEach { it.onRemoved(widget) }
@@ -107,6 +109,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
     }
 
     override fun getBuildContext(): BuildContext {
+        val activity = requireNotNull(activity)
         return object : BuildContext {
             override fun viewById(key: Any): Int? {
                 if (key is Int) {
@@ -197,7 +200,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
         // prettify android resource ids
         if (key is Int) {
             if (key < 0) return null
-            val r = activity.resources ?: return null
+            val r = activity?.resources ?: return null
 
             val hexId = Integer.toHexString(key)
 
@@ -254,6 +257,20 @@ interface ViewBinding<in W : Widget> {
      * The [Widget] was removed, also remove the View or restore the previously saved values
      */
     fun onRemoved(widget: W)
+}
+
+val noopBinding = object : ViewBinding<Widget> {
+    override fun onAdded(widget: Widget) {
+        // noop
+    }
+
+    override fun onChanged(widget: Widget) {
+        // noop
+    }
+
+    override fun onRemoved(widget: Widget) {
+        // noop
+    }
 }
 
 private inline val View.flatChildren: List<View>

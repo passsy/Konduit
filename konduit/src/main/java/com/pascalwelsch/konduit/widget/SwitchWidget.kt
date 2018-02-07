@@ -17,7 +17,7 @@ package com.pascalwelsch.konduit.widget
 
 fun WidgetListBuilder.switch(init: SwitchWidget.() -> Unit) = add(SwitchWidget(), init)
 
-class SwitchWidget : Widget() {
+class SwitchWidget : TextWidget() {
     /**
      * emits the current value when the user changes it.
      */

@@ -47,5 +47,6 @@ private class SwitchBinding(private val switch: Switch) : ViewBinding<SwitchWidg
         switch.setOnCheckedChangeListener(null)
         switch.isChecked = widget.checked
         switch.setOnCheckedChangeListener { _, checked -> widget.onSwitch?.invoke(checked) }
+        switch.isClickable = widget.onSwitch != null
     }
 }
