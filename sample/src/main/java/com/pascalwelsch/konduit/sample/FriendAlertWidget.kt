@@ -14,7 +14,7 @@ fun WidgetListBuilder.friendAlert(init: FriendAlertWidget.() -> Unit): FriendAle
  *
  * Note that it doesn't implement all properties of [AlertDialog], only those which are required
  */
-class FriendAlertWidget : Widget() {
+open class FriendAlertWidget : Widget() {
 
     open var message: String? = null
         set(value) {

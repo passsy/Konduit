@@ -15,11 +15,42 @@
 
 package com.pascalwelsch.konduit.binding
 
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import com.pascalwelsch.konduit.AndroidViewBinding
 import com.pascalwelsch.konduit.widget.Widget
 
 class ViewBinding(private val view: View) : AndroidViewBinding {
+
+    private var initialState: Widget? = null
+
+    override fun onAdded(widget: Widget) {
+        // save initial view state
+        initialState = Widget().apply {
+            enabled = view.isEnabled
+            visible = view.visibility == View.VISIBLE
+            // can't restore click listener, would require reflection
+            //onClick = view.getOnClickListener()
+            // at least restore isClickable by setting a fake listener if one is set
+            if (view.isClickable && (VERSION.SDK_INT < VERSION_CODES.ICE_CREAM_SANDWICH_MR1 || view.hasOnClickListeners())) {
+                onClick = {
+                    // add fake click listener to at least restore the isClickable UI state
+                    Log.e("Konduit", "Missing listener! For some period $view was bound to a widget. " +
+                            "The widget is now removed but the old click listener could not be recovered. " +
+                            "Make sure to manually restore the click functionality in onRemoved().")
+                }
+            }
+        }
+    }
+
+    override fun onRemoved(widget: Widget) {
+        // restore initial state
+        initialState?.let { onChanged(it) }
+    }
+
     override fun onChanged(widget: Widget) {
         if (view.isEnabled != widget.enabled) {
             view.isEnabled = widget.enabled

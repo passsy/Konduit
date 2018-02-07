@@ -75,7 +75,7 @@ class SamplePresenterTest {
 
         // Then a dialog shows a message animating the user to click increment
         val friendDialog = ui.widget<FriendAlertWidget>(friendDialogKey)
-        assertThat(friendDialog.message).isEqualTo(ui.context.getString(R.string.please_click_increment_alert_msg))
+        assertThat(friendDialog.message).isEqualTo(ui.context.getString(R.string.click_button_message))
     }
 
     @Test
@@ -108,7 +108,7 @@ class SamplePresenterTest {
 
         // Then a dialog shows a message animating the user to click increment
         val friendDialog = ui.widget<FriendAlertWidget>(friendDialogKey)
-        assertThat(friendDialog.message).isEqualTo(ui.context.getString(R.string.please_click_increment_alert_msg))
+        assertThat(friendDialog.message).isEqualTo(ui.context.getString(R.string.click_button_message))
     }
 
     @Test

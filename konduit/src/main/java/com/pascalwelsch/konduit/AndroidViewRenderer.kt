@@ -27,7 +27,6 @@ import android.widget.ProgressBar
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
-import com.pascalwelsch.konduit.binding.AndroidViewBinding
 import com.pascalwelsch.konduit.binding.ProgressBarBinding
 import com.pascalwelsch.konduit.binding.SeekBarBinding
 import com.pascalwelsch.konduit.binding.SwitchBinding
@@ -57,8 +56,8 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
             { view, add -> if (view is SeekBar) add(SeekBarBinding(view)) }
     )
 
-    fun autobind(view: View, key: Any = view.id) {
-        val bindings = bindingsFor(key)
+    fun autobind(view: View) {
+        val bindings = bindingsFor(view)
 
         Log.v("Bind", "autobinding $view")
         if (bindings.count() > 0) {
@@ -73,7 +72,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
     inline fun <reified W : Widget> bind(view: View,
             crossinline onChange: (W) -> Unit,
             noinline onAdded: ((W) -> Unit)? = null,
-            noinline onRemoved: ((W) -> Unit)? = null){
+            noinline onRemoved: ((W) -> Unit)? = null) {
         Log.v("Bind", "onChanged ${view.javaClass.simpleName} $view")
         bind(view.id, onChange, onAdded, onRemoved)
     }
@@ -83,6 +82,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
             crossinline onChange: (W) -> Unit,
             noinline onAdded: ((W) -> Unit)? = null,
             noinline onRemoved: ((W) -> Unit)? = null) {
+
         val bindings = bindingsFor(key)
 
         if (bindings.count() > 0) {
@@ -122,11 +122,17 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 
     private var lastRenderedWidgets: List<Widget> = emptyList()
 
-    val viewBindings: HashMap<Any, MutableList<AndroidViewBinding>> = hashMapOf()
+    private val viewBindings: HashMap<Any, MutableList<AndroidViewBinding>> = hashMapOf()
 
     fun bindingsFor(key: Any): MutableList<AndroidViewBinding> {
-        return viewBindings[key]
-                ?: mutableListOf<AndroidViewBinding>().apply { viewBindings[key] = this }
+        val id = if (key is View) key.id else key
+
+        val bindings = viewBindings[id]
+        if (bindings != null) return bindings
+
+        val newBindings = mutableListOf<AndroidViewBinding>()
+        viewBindings[id] = newBindings
+        return newBindings
     }
 
     @Synchronized
@@ -275,6 +281,30 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 
         return key.toString()
     }
+}
+
+/**
+ * Will be called to onChanged a widget to an arbitrary android view. This is the only connection between the two worlds
+ */
+interface AndroidViewBinding {
+
+    /**
+     * Called when the [Widget] first appears. This is where dynamic views have to be initialized and added to
+     * the window. Good bindings also save the current view state and restore it once the [Widget] will be removed.
+     *
+     * [onChanged] will be called directly afterwards, no need to bind everything here
+     */
+    fun onAdded(widget: Widget)
+
+    /**
+     * Called when the [Widget] changes, apply the new values to the bound View
+     */
+    fun onChanged(widget: Widget)
+
+    /**
+     * The [Widget] was removed, also remove the View or restore the previously saved values
+     */
+    fun onRemoved(widget: Widget)
 }
 
 private inline val View.flatChildren: List<View>

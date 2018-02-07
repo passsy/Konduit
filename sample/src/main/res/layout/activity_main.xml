@@ -78,4 +78,15 @@
         app:layout_constraintTop_toBottomOf="@+id/increment"
         app:layout_constraintVertical_bias="0.108"
         tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/text_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/text_input"
+        app:layout_constraintStart_toStartOf="@+id/text_input"
+        tools:visibility="visible" />
 </android.support.constraint.ConstraintLayout>

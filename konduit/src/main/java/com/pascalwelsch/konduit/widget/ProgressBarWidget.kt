@@ -13,11 +13,12 @@ open class ProgressBarWidget : Widget() {
             field = value
         }
 
-    var isIndeterminate: Boolean = false
+    // TODO add indeterminate state
+    /*var isIndeterminate: Boolean = false
         set(value) {
             checkWritability()
             field = value
-        }
+        }*/
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -25,7 +26,6 @@ open class ProgressBarWidget : Widget() {
         if (!super.equals(other)) return false
 
         if (progress != other.progress) return false
-        if (isIndeterminate != other.isIndeterminate) return false
 
         return true
     }
@@ -33,7 +33,6 @@ open class ProgressBarWidget : Widget() {
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + progress.hashCode()
-        result = 31 * result + isIndeterminate.hashCode()
         return result
     }
 }
