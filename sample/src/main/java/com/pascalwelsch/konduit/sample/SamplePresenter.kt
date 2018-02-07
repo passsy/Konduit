@@ -3,7 +3,6 @@ package com.pascalwelsch.konduit.sample
 import com.pascalwelsch.konduit.BuildContext
 import com.pascalwelsch.konduit.KonduitPresenter
 import com.pascalwelsch.konduit.KonduitView
-import com.pascalwelsch.konduit.sample.R.id
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.button
 import com.pascalwelsch.konduit.widget.input
@@ -27,26 +26,31 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
         return widgetList {
 
             text {
-                key = id.counter_label
+                key = R.id.counter_label
                 text = "Clicked $count times"
             }
 
             button {
-                key = id.increment
+                key = R.id.increment
                 text = if (count == 0) "Click me" else "Increment"
                 onClick = onButtonClicked
             }
 
             progressBar {
-                key = id.progress_bar
+                key = R.id.progress_bar
                 progress = myProgress / 10f
             }
 
             input {
-                key = id.text_input
+                key = R.id.text_input
                 hint = "Write 'friend' and see magic happen"
                 text = userInput
                 onTextChanged = onInputTextChanged
+            }
+
+            text {
+                key = R.id.text_length
+                text = userInput.count().toString()
             }
 
             if (showFriedDialog) {
@@ -57,11 +61,11 @@ class SamplePresenter : KonduitPresenter<KonduitView>() {
                         "Thanks for clicking $count times, friend!"
                     } else {
                         // or get it from the resources using the BuildContext
-                        context.getString(R.string.please_click_increment_alert_msg)
+                        context.getString(R.string.click_button_message)
                     }
                     // custom callback. Also notice the inline lambda. It is not ideal because this lambda
                     // will make the widget never be equal to any other widget and therefore the
-                    // bind method will always called whenever build(BuildContext) is called.
+                    // onChanged method will always called whenever build(BuildContext) is called.
                     onDismiss = {
                         setState {
                             showFriedDialog = false

@@ -12,7 +12,7 @@ class SwitchWidget : Widget() {
             field = value
         }
 
-    var value: Boolean = false
+    var checked: Boolean = false
         set(value) {
             checkWritability()
             field = value
@@ -24,7 +24,7 @@ class SwitchWidget : Widget() {
         if (!super.equals(other)) return false
 
         if (onSwitch != other.onSwitch) return false
-        if (value != other.value) return false
+        if (checked != other.checked) return false
 
         return true
     }
@@ -32,7 +32,7 @@ class SwitchWidget : Widget() {
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + (onSwitch?.hashCode() ?: 0)
-        result = 31 * result + value.hashCode()
+        result = 31 * result + checked.hashCode()
         return result
     }
 }

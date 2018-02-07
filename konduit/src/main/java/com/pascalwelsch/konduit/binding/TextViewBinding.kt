@@ -26,24 +26,51 @@ import android.util.SparseArray
 import android.view.View
 import android.widget.TextView
 import com.pascalwelsch.konduit.R
+import com.pascalwelsch.konduit.ViewBinding
+import com.pascalwelsch.konduit.ViewBindingAdapter
 import com.pascalwelsch.konduit.widget.TextWidget
-import com.pascalwelsch.konduit.widget.Widget
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
-class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
-
-    override fun bind(widget: Widget) {
-        if (widget is TextWidget) {
-
-            textView.setTextWhenChanged(widget.text)
-            textView.setHintTextWhenChanged(widget.hint)
-
-            val onChangeListener = widget.onTextChanged?.let { { text: Editable -> it.invoke(text.toString()) } }
-            textView.setTextWatcher(after = onChangeListener)
-
-            textView.setMaxLength(widget.maxLength ?: Int.MAX_VALUE)
+class TextViewBindingAdapter : ViewBindingAdapter {
+    override fun createBinding(view: View, bindWith: (ViewBinding<*>) -> Unit) {
+        if (view is TextView) {
+            bindWith(TextViewBinding(view))
         }
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+private class TextViewBinding(private val textView: TextView) : ViewBinding<TextWidget> {
+
+    private var initialText: CharSequence? = null
+    private var initialHint: CharSequence? = null
+    private var initialFilters: Array<InputFilter>? = null
+
+    override fun onAdded(widget: TextWidget) {
+        initialText = textView.text
+        initialHint = textView.hint
+        // save maxLength and more with filters
+        initialFilters = textView.filters.copyOf()
+    }
+
+    override fun onRemoved(widget: TextWidget) {
+        textView.text = initialText
+        textView.hint = initialHint
+        // setting it to null removes the watcher
+        textView.setTextWatcher(after = null)
+
+        textView.filters = initialFilters
+    }
+
+    override fun onChanged(widget: TextWidget) {
+        textView.setTextWhenChanged(widget.text)
+        textView.setHintTextWhenChanged(widget.hint)
+
+        val onChangeListener = widget.onTextChanged?.let { { text: Editable -> it.invoke(text.toString()) } }
+        textView.setTextWatcher(after = onChangeListener)
+
+        textView.setMaxLength(widget.maxLength ?: Int.MAX_VALUE)
     }
 
     // Helper functions from android.databinding.adapters.TextViewBindingAdapter
@@ -129,6 +156,11 @@ class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
         }
     }
 
+    private fun TextView.getMaxLength(): Int? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return null
+        return (filters.first { it is InputFilter.LengthFilter } as InputFilter.LengthFilter).max
+    }
+
     private fun TextView.setMaxLength(value: Int) {
         var filters: Array<InputFilter>? = filters
         if (filters == null) {
@@ -195,12 +227,12 @@ class TextViewBinding(private val textView: TextView) : AndroidViewBinding {
                     globalListeners.put(listenerResourceId, listeners)
                 }
                 val oldValue: WeakReference<T>?
-                if (listener == null) {
-                    oldValue = listeners.remove(view) as WeakReference<T>
+                oldValue = if (listener == null) {
+                    listeners.remove(view) as WeakReference<T>
                 } else {
-                    oldValue = listeners.put(view, WeakReference(listener)) as WeakReference<T>
+                    listeners.put(view, WeakReference(listener)) as WeakReference<T>
                 }
-                return oldValue?.get()
+                return oldValue.get()
             }
         }
     }
