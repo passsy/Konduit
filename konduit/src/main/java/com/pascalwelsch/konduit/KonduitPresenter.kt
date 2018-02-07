@@ -121,8 +121,14 @@ abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
     }
 }
 
+/**
+ * Contract between [KonduitPresenter] and [KonduitActivity]
+ */
 interface KonduitView : TiView {
 
+    /**
+     * access to UI specific information like strings
+     */
     fun getBuildContext(): BuildContext
 
     /**
@@ -133,10 +139,13 @@ interface KonduitView : TiView {
     fun render(widgets: List<Widget>)
 }
 
-// TODO
 interface BuildContext {
 
     fun getString(id: Any, vararg formatArgs: Any): String
-    fun viewById(key: Any): Int?
     fun getLocale(): List<Locale>
+
+    /**
+     * maps keys from [KonduitPresenter] to keys used by the View
+     */
+    fun viewById(key: Any): Int?
 }

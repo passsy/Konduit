@@ -36,24 +36,21 @@ import java.util.Locale
 private val TAG = AndroidViewRenderer::class.java.simpleName
 private const val DEBUG = false
 
-interface IAndroidViewRenderer {
-    val adapters: MutableList<ViewBindingAdapters>
-    fun autobindAllViews(view: View)
-    fun autobind(view: View)
-    fun bindingsFor(key: Any): MutableList<ViewBinding<*>>
-}
+open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
 
-open class AndroidViewRenderer(private val activity: Activity) : KonduitView, IAndroidViewRenderer {
-    override val adapters = mutableListOf(
+    private var lastRenderedWidgets: List<Widget> = emptyList()
+
+    private val viewBindings: HashMap<Any, MutableList<ViewBinding<*>>> = hashMapOf()
+
+    /**
+     * all registered adapters. feel free to add and remove adapters
+     */
+    val adapters = mutableListOf(
             ViewBindingBindingAdapters(),
             TextViewBindingBindingAdapters(),
             SwitchBindingBindingAdapters(),
             ProgressBarBindingBindingAdapters(),
             SeekBarBindingBindingAdapters())
-
-    private var lastRenderedWidgets: List<Widget> = emptyList()
-
-    private val viewBindings: HashMap<Any, MutableList<ViewBinding<*>>> = hashMapOf()
 
     @Synchronized
     override fun render(widgets: List<Widget>) {
@@ -152,7 +149,7 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView, IA
         }
     }
 
-    override fun bindingsFor(key: Any): MutableList<ViewBinding<*>> {
+    fun bindingsFor(key: Any): MutableList<ViewBinding<*>> {
         val id = if (key is View) key.id else key
 
         val bindings = viewBindings[id]
@@ -163,13 +160,13 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView, IA
         return newBindings
     }
 
-    override fun autobindAllViews(view: View) {
+    fun autobindAllViews(view: View) {
         view.flatChildren.filter { it.id > 0 }.forEach { v ->
             autobind(v)
         }
     }
 
-    override fun autobind(view: View) {
+    fun autobind(view: View) {
         val bindings = bindingsFor(view)
 
         Log.v("Bind", "autobinding $view")
