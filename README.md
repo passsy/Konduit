@@ -87,7 +87,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.pascalwelsch.konduit:konduit:0.1.0'
+    compile 'com.pascalwelsch.konduit:konduit:0.2.0'
 }
 ```
 
