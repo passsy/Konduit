@@ -3,13 +3,15 @@ apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'kotlin-android'
 apply plugin: 'jacoco'
 
+def VERSION = '0.2.0'
+
 android {
     compileSdkVersion 27
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 1
-        versionName "0.1.0"
+        versionName VERSION
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -47,6 +49,6 @@ publish {
     groupId = 'com.pascalwelsch.konduit'
     artifactId = 'konduit'
     uploadName = 'Konduit'
-    publishVersion = '0.1.0'
+    publishVersion = VERSION
     website = 'https://github.com/passsy/Konduit'
 }
