@@ -23,11 +23,11 @@ import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import com.pascalwelsch.konduit.binding.ProgressBarBindingBindingAdapters
-import com.pascalwelsch.konduit.binding.SeekBarBindingBindingAdapters
-import com.pascalwelsch.konduit.binding.SwitchBindingBindingAdapters
-import com.pascalwelsch.konduit.binding.TextViewBindingBindingAdapters
-import com.pascalwelsch.konduit.binding.ViewBindingBindingAdapters
+import com.pascalwelsch.konduit.binding.ProgressBarBindingAdapters
+import com.pascalwelsch.konduit.binding.SeekBarBindingAdapters
+import com.pascalwelsch.konduit.binding.SwitchBindingAdapters
+import com.pascalwelsch.konduit.binding.TextViewBindingAdapters
+import com.pascalwelsch.konduit.binding.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.findByKey
 import java.util.Collections.emptyList
@@ -46,11 +46,11 @@ open class AndroidViewRenderer(private val activity: Activity) : KonduitView {
      * all registered adapters. feel free to add and remove adapters
      */
     val adapters = mutableListOf(
-            ViewBindingBindingAdapters(),
-            TextViewBindingBindingAdapters(),
-            SwitchBindingBindingAdapters(),
-            ProgressBarBindingBindingAdapters(),
-            SeekBarBindingBindingAdapters())
+            ViewBindingAdapters(),
+            TextViewBindingAdapters(),
+            SwitchBindingAdapters(),
+            ProgressBarBindingAdapters(),
+            SeekBarBindingAdapters())
 
     @Synchronized
     override fun render(widgets: List<Widget>) {

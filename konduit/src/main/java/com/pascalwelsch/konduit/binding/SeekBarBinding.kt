@@ -7,7 +7,7 @@ import com.pascalwelsch.konduit.ViewBinding
 import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.SeekBarWidget
 
-class SeekBarBindingBindingAdapters : ViewBindingAdapters {
+class SeekBarBindingAdapters : ViewBindingAdapters {
     override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
         if (view is SeekBar) {
             emit(SeekBarBinding(view))

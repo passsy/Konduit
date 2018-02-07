@@ -32,7 +32,7 @@ import com.pascalwelsch.konduit.widget.TextWidget
 import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 
-class TextViewBindingBindingAdapters : ViewBindingAdapters {
+class TextViewBindingAdapters : ViewBindingAdapters {
     override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
         if (view is TextView) {
             emit(TextViewBinding(view))

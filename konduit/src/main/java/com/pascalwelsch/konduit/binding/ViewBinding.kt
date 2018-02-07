@@ -24,7 +24,7 @@ import com.pascalwelsch.konduit.ViewBinding
 import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.Widget
 
-class ViewBindingBindingAdapters : ViewBindingAdapters {
+class ViewBindingAdapters : ViewBindingAdapters {
     override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) = emit(ViewBinding(view))
 }
 

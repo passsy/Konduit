@@ -6,7 +6,7 @@ import com.pascalwelsch.konduit.ViewBinding
 import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.SwitchWidget
 
-class SwitchBindingBindingAdapters : ViewBindingAdapters {
+class SwitchBindingAdapters : ViewBindingAdapters {
     override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
         if (view is Switch) {
             emit(SwitchBinding(view))

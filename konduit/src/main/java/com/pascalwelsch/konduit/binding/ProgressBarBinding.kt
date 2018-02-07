@@ -8,7 +8,7 @@ import com.pascalwelsch.konduit.ViewBinding
 import com.pascalwelsch.konduit.ViewBindingAdapters
 import com.pascalwelsch.konduit.widget.ProgressBarWidget
 
-class ProgressBarBindingBindingAdapters : ViewBindingAdapters {
+class ProgressBarBindingAdapters : ViewBindingAdapters {
     override fun createBinding(view: View, emit: (ViewBinding<*>) -> Unit) {
         if (view is ProgressBar) {
             emit(ProgressBarBinding(view))
