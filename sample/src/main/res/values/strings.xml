@@ -16,4 +16,6 @@
 <resources>
     <string name="app_name">Konduit</string>
     <string name="click_button_message">"Click the button!"</string>
+    <string name="clear">Clear</string>
+    <string name="hint_type_something">Type something</string>
 </resources>

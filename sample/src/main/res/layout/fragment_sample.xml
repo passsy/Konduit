@@ -19,7 +19,7 @@
     android:layout_width="match_parent"
     android:background="#ccffcc"
     android:layout_height="match_parent"
-    tools:context=".SampleActivity">
+    tools:context=".alert.SampleActivity">
 
     <Button
         android:id="@+id/increment"

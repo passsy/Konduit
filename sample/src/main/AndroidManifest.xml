@@ -21,12 +21,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
-        <activity android:name=".SampleActivity">
+        <activity android:name=".alert.SampleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".input.InputActivity" android:exported="true"/>
+        <activity android:name=".alert.AlertActivity" android:exported="true"/>
     </application>
 
 </manifest>

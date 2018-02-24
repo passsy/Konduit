@@ -13,23 +13,24 @@
  * limitations under the License.
  */
 
-package com.pascalwelsch.konduit.sample
+package com.pascalwelsch.konduit.sample.alert
 
 import android.support.v7.app.AlertDialog
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.WidgetListBuilder
 
 /**
- * DSL access for the [FriendAlertWidget]
+ * DSL access for the [FizzBuzzAlertWidget]
  */
-fun WidgetListBuilder.friendAlert(init: FriendAlertWidget.() -> Unit): FriendAlertWidget = add(FriendAlertWidget(), init)
+fun WidgetListBuilder.friendAlert(init: FizzBuzzAlertWidget.() -> Unit): FizzBuzzAlertWidget = add(
+        FizzBuzzAlertWidget(), init)
 
 /**
  * Custom widget which represents a simple dialog
  *
  * Note that it doesn't implement all properties of [AlertDialog], only those which are required
  */
-open class FriendAlertWidget : Widget() {
+open class FizzBuzzAlertWidget : Widget() {
 
     open var message: String? = null
         set(value) {
@@ -45,7 +46,7 @@ open class FriendAlertWidget : Widget() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is FriendAlertWidget) return false
+        if (other !is FizzBuzzAlertWidget) return false
         if (!super.equals(other)) return false
 
         if (message != other.message) return false
