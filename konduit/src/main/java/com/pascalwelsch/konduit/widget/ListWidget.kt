@@ -15,8 +15,7 @@
 
 package com.pascalwelsch.konduit.widget
 
-fun <T> WidgetListBuilder.singleSelectionListView(init: ListWidget<T>.() -> Unit): ListWidget<T> = add(ListWidget(),
-        init)
+fun <T> WidgetListBuilder.listView(init: ListWidget<T>.() -> Unit): ListWidget<T> = add(ListWidget(), init)
 
 open class ListWidget<T> : Widget() {
 

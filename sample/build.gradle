@@ -5,11 +5,10 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.pascalwelsch.konduit.sample"
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
     }
@@ -30,14 +29,15 @@ dependencies {
     def supportLibVersion = "27.0.2"
     implementation "com.android.support:support-annotations:$supportLibVersion"
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.0.2'
+    implementation 'com.pascalwelsch.arrayadapter:arrayadapter:1.3.0'
+    implementation 'com.lucasurbas:listitemview:1.0.5'
     implementation project(':konduit')
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.assertj:assertj-core:3.9.0'
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    testImplementation "com.nhaarman:mockito-kotlin:1.5.0"
+    testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
 }

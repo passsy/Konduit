@@ -23,6 +23,7 @@ import android.os.LocaleList
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import com.pascalwelsch.konduit.binding.CheckBoxBindingAdapter
 import com.pascalwelsch.konduit.binding.ProgressBarBindingAdapter
 import com.pascalwelsch.konduit.binding.SeekBarBindingAdapter
 import com.pascalwelsch.konduit.binding.SwitchBindingAdapter
@@ -50,6 +51,7 @@ open class AndroidViewRenderer : KonduitView {
     val adapters = mutableListOf(
             ViewBindingAdapter(),
             TextViewBindingAdapter(),
+            CheckBoxBindingAdapter(),
             SwitchBindingAdapter(),
             ProgressBarBindingAdapter(),
             SeekBarBindingAdapter())
@@ -257,20 +259,6 @@ interface ViewBinding<in W : Widget> {
      * The [Widget] was removed, also remove the View or restore the previously saved values
      */
     fun onRemoved(widget: W)
-}
-
-val noopBinding = object : ViewBinding<Widget> {
-    override fun onAdded(widget: Widget) {
-        // noop
-    }
-
-    override fun onChanged(widget: Widget) {
-        // noop
-    }
-
-    override fun onRemoved(widget: Widget) {
-        // noop
-    }
 }
 
 private inline val View.flatChildren: List<View>
