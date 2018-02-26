@@ -60,7 +60,9 @@ private class TextViewBinding(private val textView: TextView) : ViewBinding<Text
         // setting it to null removes the watcher
         textView.setTextWatcher(after = null)
 
-        textView.filters = initialFilters
+        if (initialFilters != null) {
+            textView.filters = initialFilters
+        }
     }
 
     override fun onChanged(widget: TextWidget) {

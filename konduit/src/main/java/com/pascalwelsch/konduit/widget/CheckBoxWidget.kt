@@ -15,13 +15,17 @@
 
 package com.pascalwelsch.konduit.widget
 
-fun <T> WidgetListBuilder.singleSelectableListView(
-        init: SingleSelectableListWidget<T>.() -> Unit): SingleSelectableListWidget<T> = add(
-        SingleSelectableListWidget(), init)
+fun WidgetListBuilder.checkBox(init: CheckBoxWidget.() -> Unit) = add(CheckBoxWidget(), init)
 
-class SingleSelectableListWidget<T> : ListWidget<T>() {
+open class CheckBoxWidget : ButtonWidget() {
 
-    var selectedItem: T? = null
+    var checked: Boolean = false
+        set(value) {
+            checkWritability()
+            field = value
+        }
+
+    var onCheckedChanged: ((isChecked: Boolean) -> Unit)? = null
         set(value) {
             checkWritability()
             field = value
@@ -29,17 +33,19 @@ class SingleSelectableListWidget<T> : ListWidget<T>() {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is SingleSelectableListWidget<*>) return false
+        if (other !is CheckBoxWidget) return false
         if (!super.equals(other)) return false
 
-        if (selectedItem != other.selectedItem) return false
+        if (checked != other.checked) return false
+        if (onCheckedChanged != other.onCheckedChanged) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = super.hashCode()
-        result = 31 * result + (selectedItem?.hashCode() ?: 0)
+        result = 31 * result + checked.hashCode()
+        result = 31 * result + (onCheckedChanged?.hashCode() ?: 0)
         return result
     }
 }

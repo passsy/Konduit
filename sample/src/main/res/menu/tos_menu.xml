@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2018 Pascal Welsch
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +14,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">Konduit</string>
-    <string name="click_button_message">"Click the button!"</string>
-    <string name="clear">Clear</string>
-    <string name="hint_type_something">Type something</string>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/submit"
+        android:title="Submit"
+        app:showAsAction="always" />
+</menu>
