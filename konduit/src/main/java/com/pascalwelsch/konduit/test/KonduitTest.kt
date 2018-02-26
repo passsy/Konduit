@@ -39,7 +39,7 @@ import java.util.concurrent.Executor
  * ```
  */
 inline fun <reified V : KonduitView, P : KonduitPresenter<V>> P.testUi(
-        context: BuildContext? = null): KobiTestableUi<P, V> {
+        context: BuildContext? = null): KonduitTestUi<P, V> {
     val testPresenter = this.test()
     renderThreadExecutor = Executor { it.run() }
 
@@ -61,10 +61,10 @@ inline fun <reified V : KonduitView, P : KonduitPresenter<V>> P.testUi(
     }
     testPresenter.attachView(view)
 
-    return KobiTestableUi(this, testPresenter, renderCaptor, buildContext)
+    return KonduitTestUi(this, testPresenter, renderCaptor, buildContext)
 }
 
-class KobiTestableUi<out P : KonduitPresenter<V>, V : KonduitView>(
+class KonduitTestUi<out P : KonduitPresenter<V>, V : KonduitView>(
         val presenter: P,
         val instructor: TiTestPresenter<V>,
         val captor: KArgumentCaptor<List<Widget>>,
