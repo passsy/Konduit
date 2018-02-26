@@ -87,13 +87,17 @@ repositories {
 }
 
 dependencies {
-    compile 'com.pascalwelsch.konduit:konduit:0.2.0'
+    compile 'com.pascalwelsch.konduit:konduit:0.3.0'
 }
 ```
 
 ## Usage
 
-// TODO
+See samples
+ - [EditText](https://github.com/passsy/Konduit/blob/master/sample/src/main/java/com/pascalwelsch/konduit/sample/input/InputSample.kt) - Two-way binding of an EditText and i18n
+ - [Alert](https://github.com/passsy/Konduit/blob/master/sample/src/main/java/com/pascalwelsch/konduit/sample/alert/AlertSample.kt) - Custom Widget and dynamic View
+ - [RecyclerView](https://github.com/passsy/Konduit/blob/master/sample/src/main/java/com/pascalwelsch/konduit/sample/MainActivity.kt) - `ListsWidget` with click listener bound to custom RecyclerView.Adapter
+ - [Options Menu](https://github.com/passsy/Konduit/blob/master/sample/src/main/java/com/pascalwelsch/konduit/sample/options/OptionsSample.kt) - Options menu with Widgets / manual binding
 
 ## License
 
