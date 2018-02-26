@@ -39,6 +39,7 @@ class AcceptTosActivity : KonduitActivity<OptionsMenuPresenter, AcceptTosView>()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_options_menu)
 
+        // Konduit doesn't care how the widget is presented. It could be a Button or a OptionsMenuItem.
         // The options menu is not always there and directly accessing the items is difficult. Therefore the view
         // saves the latest widget, triggers a rebuild and binds the data when the value is ready
         bind<Widget>(R.id.submit, onChange = {
@@ -52,7 +53,7 @@ class AcceptTosActivity : KonduitActivity<OptionsMenuPresenter, AcceptTosView>()
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.tos_menu, menu)
-        return true
+        return onSubmitWidget != null
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {

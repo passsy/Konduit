@@ -19,6 +19,7 @@ import com.nhaarman.mockito_kotlin.*
 import com.pascalwelsch.konduit.BuildContext
 import com.pascalwelsch.konduit.KonduitPresenter
 import com.pascalwelsch.konduit.KonduitView
+import com.pascalwelsch.konduit.widget.CheckBoxWidget
 import com.pascalwelsch.konduit.widget.InputWidget
 import com.pascalwelsch.konduit.widget.TextWidget
 import com.pascalwelsch.konduit.widget.Widget
@@ -78,6 +79,17 @@ class KobiTestableUi<out P : KonduitPresenter<V>, V : KonduitView>(
     fun <T : Widget> widget(key: Any): T {
         val widget = captor.lastValue.findByKey(key)
         if (widget == null) throw IllegalStateException("widget with id $key not found")
+        // explicitly don't use a reified inline function which creates unreadable stacktraces
+        @Suppress("UNCHECKED_CAST")
+        return widget as T
+    }
+
+    /**
+     * tries to finds the widget in the last rendered widget tree. Don't save the reference the reference changes after every call to render()
+     */
+    fun <T : Widget> widgetOrNull(key: Any): T? {
+        val widget = captor.lastValue.findByKey(key)
+        if (widget == null) return null
         // explicitly don't use a reified inline function which creates unreadable stacktraces
         @Suppress("UNCHECKED_CAST")
         return widget as T
@@ -146,5 +158,23 @@ fun TextWidget.isEmpty(): TextWidget {
     if (text?.isEmpty() != true) {
         throw IllegalArgumentException("text '${this.text}' should be empty")
     }
+    return this
+}
+
+fun CheckBoxWidget.toggle(): CheckBoxWidget {
+    require(enabled)
+    onCheckedChanged?.invoke(!checked)
+    return this
+}
+
+fun CheckBoxWidget.check(): CheckBoxWidget {
+    require(enabled)
+    onCheckedChanged?.invoke(true)
+    return this
+}
+
+fun CheckBoxWidget.uncheck(): CheckBoxWidget {
+    require(enabled)
+    onCheckedChanged?.invoke(false)
     return this
 }

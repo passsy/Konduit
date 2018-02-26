@@ -22,7 +22,7 @@ import com.pascalwelsch.konduit.widget.WidgetListBuilder
 /**
  * DSL access for the [FizzBuzzAlertWidget]
  */
-fun WidgetListBuilder.friendAlert(init: FizzBuzzAlertWidget.() -> Unit): FizzBuzzAlertWidget = add(
+fun WidgetListBuilder.fizzBuzzAlert(init: FizzBuzzAlertWidget.() -> Unit): FizzBuzzAlertWidget = add(
         FizzBuzzAlertWidget(), init)
 
 /**

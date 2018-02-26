@@ -36,11 +36,11 @@ class AlertActivity : KonduitActivity<AlertPresenter, KonduitView>() {
         title = "FizzBuzz"
 
         // Konduit doesn't know how to bind a 
-        bind(friendDialogKey, FizzBuzzAlertBinding(this))
+        bind(fizzBuzzAlert, FizzBuzzAlertBinding(this))
     }
 }
 
-internal const val friendDialogKey = "friend dialog"
+internal const val fizzBuzzAlert = "alert"
 
 class AlertPresenter : KonduitPresenter<KonduitView>() {
 
@@ -56,12 +56,12 @@ class AlertPresenter : KonduitPresenter<KonduitView>() {
             onClick = ::onButtonClicked
         }
 
-        // show the dialog as long as `showFriedDialog` is true, when the friendAlert Widget is absent it will
+        // show the dialog as long as `showFriedDialog` is true, when the fizzBuzzAlert Widget is absent it will
         // be removed from the UI (`onRemoved` gets called)
         if (showFriedDialog) {
 
-            friendAlert {
-                key = friendDialogKey
+            fizzBuzzAlert {
+                key = fizzBuzzAlert
                 message = "$counter -> ${counter.toFizzBuzz()}"
 
                 // custom callback. Also notice the inline lambda. It is not ideal because this lambda
