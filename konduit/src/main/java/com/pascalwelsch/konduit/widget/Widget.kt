@@ -18,9 +18,17 @@ package com.pascalwelsch.konduit.widget
 @DslMarker
 annotation class WidgetMarker
 
-fun widgetList(init: WidgetListBuilder.() -> Unit): List<Widget> = WidgetListBuilder().apply(init)
+typealias WidgetListBuilder = MutableList<Widget>
+
+fun widgetList(init: WidgetListBuilder.() -> Unit): List<Widget> = mutableListOf<Widget>().apply(init)
 
 fun WidgetListBuilder.widget(init: Widget.() -> Unit): Widget = add(Widget(), init)
+
+inline fun <T : Widget> WidgetListBuilder.add(widget: T, init: T.() -> Unit): T {
+    widget.apply(init)
+    add(widget)
+    return widget
+}
 
 @WidgetMarker
 open class Widget {
@@ -103,15 +111,6 @@ open class Widget {
         result = 31 * result + (onClick?.hashCode() ?: 0)
         result = 31 * result + isWritable.hashCode()
         return result
-    }
-}
-
-class WidgetListBuilder : MutableList<Widget> by mutableListOf() {
-
-    inline fun <T : Widget> add(widget: T, init: T.() -> Unit): T {
-        widget.apply(init)
-        add(widget)
-        return widget
     }
 }
 

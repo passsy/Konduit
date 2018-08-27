@@ -17,6 +17,7 @@ package de.insta.upb.kobi
 
 import com.pascalwelsch.konduit.widget.ListWidget
 import com.pascalwelsch.konduit.widget.WidgetListBuilder
+import com.pascalwelsch.konduit.widget.add
 
 fun <T> WidgetListBuilder.multiSelectableListView(
         init: MultiSelectableListWidget<T>.() -> Unit): MultiSelectableListWidget<T> = add(

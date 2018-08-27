@@ -16,8 +16,8 @@
 package com.pascalwelsch.konduit
 
 import android.support.annotation.VisibleForTesting
-import android.util.Log
 import com.pascalwelsch.konduit.widget.Widget
+import net.grandcentrix.thirtyinch.TiLog
 import net.grandcentrix.thirtyinch.TiPresenter
 import net.grandcentrix.thirtyinch.TiView
 import java.lang.IllegalStateException
@@ -80,7 +80,7 @@ abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
 
     fun dispatchRender() {
         if (view == null) {
-            Log.v(TAG, "no view, don't render. Next attach will trigger render again")
+            TiLog.v(TAG, "no view, don't render. Next attach will trigger render again")
             return
         }
 
@@ -95,7 +95,7 @@ abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
         renderThreadExecutor.execute {
             val view = this@KonduitPresenter.view
             if (view == null) {
-                Log.v(TAG, "view lost, don't render. Wait for next attach")
+                TiLog.v(TAG, "view lost, don't render. Wait for next attach")
                 return@execute
             }
 
@@ -105,6 +105,8 @@ abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
                     dirty = false
                     widgets
                 }
+
+                exchangeListeners(widgets)
 
                 // make all immutable
                 widgets.forEach { it.lock() }
@@ -119,6 +121,36 @@ abstract class KonduitPresenter<V : KonduitView> : TiPresenter<V>() {
             }
         }
     }
+
+    /**
+     * replaces listeners in widgets with static listeners widgets for the widget in the view to prevent the widgets
+     * from changing all the time since lambdas instances are always different
+     */
+    private fun exchangeListeners(widgets: List<Widget>) {
+        widgets.forEach { widget ->
+            val clickListener = widget.onClick
+            val callbackReferenceId = "${this::class.java.name}${widget::class.java.name}::${widget.key}"
+            if (clickListener != null) {
+                widgetCallbacks[callbackReferenceId] = clickListener
+                var presenterCallback = presenterCallbacks[callbackReferenceId]
+                if (presenterCallback == null) {
+                    presenterCallback = object : (() -> Unit) {
+                        override fun invoke() {
+                            widgetCallbacks[callbackReferenceId]?.invoke()
+                        }
+                    }
+                    presenterCallbacks[callbackReferenceId] = presenterCallback
+                }
+                widget.onClick = presenterCallback
+            } else {
+                widgetCallbacks.remove(callbackReferenceId)
+                presenterCallbacks.remove(callbackReferenceId)
+            }
+        }
+    }
+
+    private var presenterCallbacks = mutableMapOf<String, () -> Unit>()
+    private var widgetCallbacks = mutableMapOf<String, () -> Unit>()
 }
 
 /**

@@ -36,7 +36,7 @@ dependencies {
     implementation "com.android.support:support-v4:$supportLibVersion"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:3.9.0'
+    testImplementation 'org.assertj:assertj-core:3.10.0'
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
