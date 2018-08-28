@@ -18,6 +18,7 @@ package com.pascalwelsch.konduit.sample.alert
 import android.support.v7.app.AlertDialog
 import com.pascalwelsch.konduit.widget.Widget
 import com.pascalwelsch.konduit.widget.WidgetListBuilder
+import com.pascalwelsch.konduit.widget.add
 
 /**
  * DSL access for the [FizzBuzzAlertWidget]
