@@ -47,6 +47,8 @@ private class TextViewBinding(private val textView: TextView) : ViewBinding<Text
     private var initialHint: CharSequence? = null
     private var initialFilters: Array<InputFilter>? = null
 
+    private var lastTextChange = 0L
+
     override fun onAdded(widget: TextWidget) {
         initialText = textView.text
         initialHint = textView.hint
@@ -66,10 +68,22 @@ private class TextViewBinding(private val textView: TextView) : ViewBinding<Text
     }
 
     override fun onChanged(widget: TextWidget) {
-        textView.setTextWhenChanged(widget.text)
-        textView.setHintTextWhenChanged(widget.hint)
+        val textChanged = (widget.renderTime - lastTextChange) < 0
+        if (textChanged) {
+            // Text was changed by user after render() was called. Skipping updating the text
+            // This is only possible when the widget has a `onTextChanged` listener, therefore it is not a problem,
+            // the widget will receive another update
+        } else {
+            textView.setTextWhenChanged(widget.text)
+        }
 
-        val onChangeListener = widget.onTextChanged?.let { { text: Editable -> it.invoke(text.toString()) } }
+        textView.setHintTextWhenChanged(widget.hint)
+        val onChangeListener = widget.onTextChanged?.let {
+            { text: Editable ->
+                lastTextChange = System.nanoTime()
+                it.invoke(text.toString())
+            }
+        }
         textView.setTextWatcher(after = onChangeListener)
 
         textView.setMaxLength(widget.maxLength ?: Int.MAX_VALUE)
