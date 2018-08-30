@@ -51,9 +51,21 @@ open class Widget {
     private var isWritable = true
 
     /**
+     * remember the time this widget was locked
+     *
+     * Might be useful to prevent overriding changes in the UI which happened after rendering this view
+     *
+     * This is not part of [equals]
+     */
+    @Transient
+    @Volatile
+    internal var renderTime: Long = Long.MAX_VALUE
+
+    /**
      * Makes the widget immutable
      */
     fun lock() {
+        renderTime = System.nanoTime()
         isWritable = false
     }
 
